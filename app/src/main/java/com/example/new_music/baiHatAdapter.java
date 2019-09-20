@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class baiHatAdapter extends RecyclerView.Adapter<baiHatAdapter.WordViewHolder> {
     ArrayList<baiHat> listBaihat;
     Context context;
-    int layout;
+    //int layout;
 
-    public baiHatAdapter(ArrayList<baiHat> listBaiha7, Context context) {
+    public baiHatAdapter(ArrayList<baiHat> listBaihat, Context context) {
         this.listBaihat = listBaihat;
-        this.layout=layout;
+        //this.layout=layout;
         this.context = context;
     }
 
@@ -37,7 +37,7 @@ public class baiHatAdapter extends RecyclerView.Adapter<baiHatAdapter.WordViewHo
 
     @Override
     public void onBindViewHolder(@NonNull baiHatAdapter.WordViewHolder holder, int position) {
-        holder.tstt.setText(listBaihat.get(position).getStt()+"");
+        holder.tstt.setText(listBaihat.get(position).getStt());
         holder.ttenbh.setText(listBaihat.get(position).getTenbh());
         holder.ituychon.setImageResource(listBaihat.get(position).getBia());
     }
@@ -58,6 +58,7 @@ public class baiHatAdapter extends RecyclerView.Adapter<baiHatAdapter.WordViewHo
             tstt=(TextView)itemView.findViewById(R.id.stt);
             ttenbh=(TextView)itemView.findViewById(R.id.tenbh3);
             ituychon=(ImageView)itemView.findViewById(R.id.tuychon);
+            itemView.setOnClickListener(this);
         }
 
         @Override

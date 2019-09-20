@@ -1,21 +1,21 @@
 package com.example.new_music;
 
 public class baiHat {
-    int stt;
+    String stt;
     String tenbh;
     int bia;
 
-    public baiHat(int stt, String tenbh, int bia) {
+    public baiHat(String stt, String tenbh, int bia) {
         this.stt = stt;
         this.tenbh = tenbh;
         this.bia = bia;
     }
 
-    public int getStt() {
+    public String getStt() {
         return stt;
     }
 
-    public void setStt(int stt) {
+    public void setStt(String stt) {
         this.stt = stt;
     }
 
