@@ -4,23 +4,40 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class fragmentListBaihat extends Fragment {
     @Nullable
-
+    RecyclerView recyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager layoutManager;
+    View inflate;
+    TextView tenbh;
     @Override
   //  baiHatAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list_baihat,container,false);
+        inflate = inflater.inflate(R.layout.list_baihat, container, false);
+        recyclerView=(RecyclerView)inflate.findViewById(R.id.recycleview);
+        recyclerView.setHasFixedSize(true);
+        layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(layoutManager);
+        ArrayList<baiHat> list=new ArrayList<>();
+        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
+        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
+        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
+        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
+        baiHatAdapter adapter=new baiHatAdapter(list,getContext());
+        recyclerView.setAdapter(adapter);
+        return inflate;
     }
-
 
 }

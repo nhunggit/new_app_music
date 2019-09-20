@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class listadapter extends Activity {
-    RecyclerView recyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager layoutManager;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -20,16 +17,5 @@ public class listadapter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_baihat);
 
-        recyclerView=(RecyclerView)findViewById(R.id.recycleview);
-        recyclerView.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
-        ArrayList<baiHat> list=new ArrayList<>();
-        list.add(new baiHat(1,"Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat(1,"Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat(1,"Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat(1,"Nam thang ruc ro",R.drawable.ic_tuychon));
-        baiHatAdapter adapter=new baiHatAdapter(list,this);
-        recyclerView.setAdapter(adapter);
     }
 }
