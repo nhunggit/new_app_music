@@ -1,5 +1,6 @@
 package com.example.new_music;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class fragmentListBaihat extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     View inflate;
     TextView tenbh;
+    @SuppressLint("WrongConstant")
     @Override
   //  baiHatAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

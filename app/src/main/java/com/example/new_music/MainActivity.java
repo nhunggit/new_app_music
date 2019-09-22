@@ -2,8 +2,13 @@ package com.example.new_music;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,16 +17,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fragment fragmentlistBaihat = new fragmentListBaihat();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragmentlistBaihat).commit();
-//        FragmentManager fragmentManager=getFragmentManager();
-//        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-//
-//        fragmentTransaction.add(R.id.fragmentlist,fragmentlistBaihat);
-//        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist, fragmentlistBaihat).commit();
 
-//        FragmentTransaction fragmenttransaction=fragmentManager.beginTransaction();
-//        fragmentListBaihat fragmentlistBaihat=new fragmentListBaihat();
-//
-//        fragmenttransaction.add(R.id.fragmentlist,fragmentlistBaihat);
+    }
+
+    public void onClickbh(View view) {
+        Fragment fragmentBaihat=new fragmentBaihat();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragmentBaihat).commit();
     }
 }

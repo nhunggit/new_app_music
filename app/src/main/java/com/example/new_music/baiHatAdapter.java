@@ -68,6 +68,8 @@ public class baiHatAdapter extends RecyclerView.Adapter<baiHatAdapter.WordViewHo
             baiHat element=listBaihat.get(mposition);
             listBaihat.set(mposition,element);
             baihatadapter.notifyDataSetChanged();
+
+
         }
     }
 }

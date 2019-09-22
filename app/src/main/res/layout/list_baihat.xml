@@ -21,7 +21,8 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="tenbaihat"
-            android:textSize="24dp"/>
+            android:textSize="24dp"
+            android:onClick="onClickbh"/>
         <ImageView
             android:id="@+id/trangthai"
             android:layout_width="50dp"
