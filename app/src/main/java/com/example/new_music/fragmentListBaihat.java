@@ -1,7 +1,10 @@
 package com.example.new_music;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ public class fragmentListBaihat extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     View inflate;
     TextView tenbh;
+    Uri nhacUri= MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     @SuppressLint("WrongConstant")
     @Override
   //  baiHatAdapter adapter;
@@ -39,7 +43,14 @@ public class fragmentListBaihat extends Fragment {
         list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
         baiHatAdapter adapter=new baiHatAdapter(list,getContext());
         recyclerView.setAdapter(adapter);
+
+
         return inflate;
     }
 
+  //  @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        ContentResolver contentResolver=getCo
+//    }
 }
