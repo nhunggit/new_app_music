@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:title="Nhung cute" android:id="@+id/cute"></item>
+<item android:title="Nhung xinh dep" android:id="@+id/xinhdep"></item>
+    <item android:title="Search"
+       app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always"
+        android:id="@+id/timkiem"
+        android:icon="@drawable/ic_search_white"></item>
+</menu>

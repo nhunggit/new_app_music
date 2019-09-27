@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:padding="10dp">
-<TextView
-    android:layout_width="50dp"
-    android:layout_height="wrap_content"
-    android:id="@+id/stt"
-    android:text="STT"
-    android:textSize="24dp"/>
-    <TextView
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:text="Ten bai hat"
-        android:id="@+id/tenbh3"/>
-    <ImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_tuychon"
-        android:id="@+id/tuychon"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp">
+
+        <TextView
+            android:id="@+id/item_stt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Stt"
+            android:textColor="@android:color/black"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="24dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_tuychon" />
+    </LinearLayout>
 </LinearLayout>
+
+
+

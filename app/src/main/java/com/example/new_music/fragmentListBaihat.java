@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+
 public class fragmentListBaihat extends Fragment {
     @Nullable
     RecyclerView recyclerView;
@@ -26,31 +27,31 @@ public class fragmentListBaihat extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     View inflate;
     TextView tenbh;
-    Uri nhacUri= MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+   // Uri nhacUri= MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     @SuppressLint("WrongConstant")
     @Override
   //  baiHatAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inflate = inflater.inflate(R.layout.list_baihat, container, false);
+        tenbh=(TextView)inflate.findViewById(R.id.song_playing);
         recyclerView=(RecyclerView)inflate.findViewById(R.id.recycleview);
         recyclerView.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
-        ArrayList<baiHat> list=new ArrayList<>();
-        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
-        list.add(new baiHat("1","Nam thang ruc ro",R.drawable.ic_tuychon));
-        baiHatAdapter adapter=new baiHatAdapter(list,getContext());
-        recyclerView.setAdapter(adapter);
+        @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        ArrayList<baiHat> arrayList=new ArrayList<>();
+        arrayList.add(new baiHat(1,"Nam thang ruc ro",R.drawable.ic_tuychon,R.raw.song_gio));
 
+        baiHatAdapter adapter=new baiHatAdapter(arrayList,getContext());
+        recyclerView.setAdapter(adapter);
+        //tenbh.setText(adapter.onItemClick());
 
         return inflate;
     }
-
-  //  @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        ContentResolver contentResolver=getCo
+    public interface OnListViewItemClickListener {
+        String onItemClick(int position);
+    }
+//    public interface OnListViewItemClickListener {
+//
 //    }
+
 }

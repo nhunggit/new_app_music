@@ -1,21 +1,23 @@
 package com.example.new_music;
 
 public class baiHat {
-    String stt;
+    int stt;
     String tenbh;
     int bia;
+    int file;
 
-    public baiHat(String stt, String tenbh, int bia) {
+    public baiHat(int stt, String tenbh, int bia, int file) {
         this.stt = stt;
         this.tenbh = tenbh;
         this.bia = bia;
+        this.file = file;
     }
 
-    public String getStt() {
+    public int getStt() {
         return stt;
     }
 
-    public void setStt(String stt) {
+    public void setStt(int stt) {
         this.stt = stt;
     }
 
@@ -33,5 +35,13 @@ public class baiHat {
 
     public void setBia(int bia) {
         this.bia = bia;
+    }
+
+    public int getFile() {
+        return file;
+    }
+
+    public void setFile(int file) {
+        this.file = file;
     }
 }
