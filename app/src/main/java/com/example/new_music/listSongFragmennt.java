@@ -34,8 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class listSongFragmennt extends baseListSong implements LoaderManager.LoaderCallbacks<Cursor> {
-    private RecyclerView mRecyclerView;
-    protected SongAdapter mAdapter;
+//    private RecyclerView mRecyclerView;
+//    protected SongAdapter mAdapter;
     private static final int LOADER_ID = 1;
     private String[] projection={MediaStore.Audio.AudioColumns.DATA,MediaStore.Audio.AudioColumns.ALBUM,MediaStore.Audio.AudioColumns.ARTIST,MediaStore.Audio.Media.TITLE,MediaStore.Audio.Media.DURATION};
     @NonNull
@@ -50,8 +50,7 @@ public class listSongFragmennt extends baseListSong implements LoaderManager.Loa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.list_baihat,container,false);
-        mRecyclerView=view.findViewById(R.id.recyclerview);
-        mRecyclerView.setHasFixedSize(true);
+
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -69,19 +68,19 @@ public class listSongFragmennt extends baseListSong implements LoaderManager.Loa
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
             do {
-                String path = c.getString(1);
-                String album = c.getString(2);
-                String artist = c.getString(3);
-                String name = c.getString(4);
-                String duration = c.getString(5);
+                String path = c.getString(0);
+                String album = c.getString(1);
+                String artist = c.getString(2);
+                String name = c.getString(3);
+                String duration = c.getString(4);
                 listMusic.add(new Song(id, name, path, artist, Integer.parseInt(duration)));
                 Log.d("info", " Album :" + album);
                 Log.d("Path :" + path, " Artist :" + artist + " Duration " + duration);
                 id++;
             } while (c.moveToNext());
-            mAdapter=new SongAdapter(listMusic);
-            mRecyclerView.setAdapter(mAdapter);
+
         }
+        setlist(listMusic);
 //        mAdapter.updateList(listMusic);
 //        //mAdapter.setSong(listMusic);
 //        mAdapter.setmTypeSong("AllSong");

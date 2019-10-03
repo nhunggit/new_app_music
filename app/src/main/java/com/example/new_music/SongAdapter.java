@@ -24,7 +24,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private String mTypeSong;
 
     public SongAdapter(ArrayList<Song> listMusic) {
-        this.mListSong=listMusic;
+        this.mSong=listMusic;
     }
 
 
@@ -32,6 +32,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view=mInflater.inflate(R.layout.item_baihat,parent,false);
+
         return  new ViewHolder(view);
     }
 

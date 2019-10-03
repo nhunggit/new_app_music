@@ -38,6 +38,10 @@ public class baseListSong extends Fragment {
         initView(view);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setHasOptionsMenu(true);
+        mRecyclerView=view.findViewById(R.id.recyclerview);
+        mAdapter=new SongAdapter(mListSongs);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
         return view;
     }
 //    public void setSong(ArrayList<Song> songs) {
@@ -47,6 +51,10 @@ public class baseListSong extends Fragment {
 //            updateUI();
 //        }
 //    }
+    protected void setlist(ArrayList<Song> list){
+        this.mListSongs = list;
+    }
+
     void initView(View view){
         mRecyclerView = view.findViewById(R.id.recyclerview);
         mClickPlay = view.findViewById(R.id.play);
