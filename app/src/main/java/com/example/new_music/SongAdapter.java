@@ -23,6 +23,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private OnClickItemView mClickItemmView;
     private String mTypeSong;
 
+    public SongAdapter(ArrayList<Song> listMusic) {
+        this.mListSong=listMusic;
+    }
+
 
     @NonNull
     @Override

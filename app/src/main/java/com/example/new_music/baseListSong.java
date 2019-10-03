@@ -38,10 +38,6 @@ public class baseListSong extends Fragment {
         initView(view);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setHasOptionsMenu(true);
-//        mSharePreferences = this.getActivity().getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);// move Service
-//        position = mSharePreferences.getInt("position", 0);
-//        mNameSong.setText(mSharePreferences.getString("nameSong", "Name Song"));
-//        mArtist.setText(mSharePreferences.getString("nameArtist", "Name Artist"));
         return view;
     }
 //    public void setSong(ArrayList<Song> songs) {
