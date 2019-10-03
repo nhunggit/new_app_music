@@ -27,43 +27,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       Fragment fragmentlistBaihat = new fragmentListBaihat();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist, fragmentlistBaihat).commit();
-        //contentProvider contentProvider=new contentProvider();
-        //contentProvider.onCreate();
-//        Fragment fragmentbaihat=new fragmentBaihat();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentbaihat,fragmentbaihat).commit();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlistbaihat, fragmentlistBaihat).commit();
     }
-//
-//    public void onClickbh(View view) {
-//        Fragment fragmentBaihat=new fragmentBaihat();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragmentBaihat).commit();
+}
+//       Fragment fragmentlistBaihat = new fragmentListBaihat();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist, fragmentlistBaihat).commit();
+//        //contentProvider contentProvider=new contentProvider();
+//        //contentProvider.onCreate();
+////        Fragment fragmentbaihat=new fragmentBaihat();
+////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentbaihat,fragmentbaihat).commit();
+////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlistbaihat, fragmentlistBaihat).commit();
 //    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tuychon_menu,menu);
-        MenuItem search=menu.findItem(R.id.timkiem);
-        SearchView searchView= (SearchView) search.getActionView();
-        return super.onCreateOptionsMenu(menu);
-    }
+////
+////    public void onClickbh(View view) {
+////        Fragment fragmentBaihat=new fragmentBaihat();
+////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragmentBaihat).commit();
+////    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.tuychon_menu,menu);
+//        MenuItem search=menu.findItem(R.id.timkiem);
+//        SearchView searchView= (SearchView) search.getActionView();
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(@NonNull MenuItem item) {
+//        return super.onContextItemSelected(item);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    public void tenbaihat(View view) {
+//        Fragment fragment=new fragmentBaihat();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragment).commit();
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void tenbaihat(View view) {
-        Fragment fragment=new fragmentBaihat();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragment).commit();
-
-    }
+ //   }
 //    public void provider(){
 //        ContentResolver contentResolver=getContentResolver();
 //        Cursor cusor=contentResolver.query(nhacUri,null,null,null,null);
@@ -79,4 +81,4 @@ public class MainActivity extends AppCompatActivity {
 //            i++;
 //        }
 //    }
-}
+//}
