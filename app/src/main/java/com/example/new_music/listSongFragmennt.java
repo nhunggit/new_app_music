@@ -78,12 +78,8 @@ public class listSongFragmennt extends baseListSong implements LoaderManager.Loa
                 Log.d("Path :" + path, " Artist :" + artist + " Duration " + duration);
                 id++;
             } while (c.moveToNext());
-
         }
         setlist(listMusic);
-//        mAdapter.updateList(listMusic);
-//        //mAdapter.setSong(listMusic);
-//        mAdapter.setmTypeSong("AllSong");
     }
 
 

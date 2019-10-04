@@ -23,8 +23,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private OnClickItemView mClickItemmView;
     private String mTypeSong;
 
-    public SongAdapter(ArrayList<Song> listMusic) {
+    public SongAdapter(Context context,ArrayList<Song> listMusic) {
         this.mSong=listMusic;
+        this.context=context;
     }
 
 
@@ -44,7 +45,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 holder.mNameSong.setText(current.getTitle());
                 SimpleDateFormat formatTime = new SimpleDateFormat("mm:ss");
                 holder.mHour.setText(formatTime.format(current.getDuration()));
-
                 final Song finalCurrent = current;
                 holder.mConstraintLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -54,19 +54,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 });
             }
         }
-//    public void updateList(ArrayList<Song> songs) {
-//        mSong = songs;
-//        mListSong = new ArrayList<>(mSong);
-//        notifyDataSetChanged();
-//    }
+
     public void setSong(ArrayList<Song> songs) {
         mSong = songs;
         Log.d("size2", songs.size() + "//");
         notifyDataSetChanged();
     }
-//    public void setmTypeSong(String mTypeSong) {
-//        this.mTypeSong = mTypeSong;
-//    }
+
     @Override
     public int getItemCount() {
             if(mSong!=null)
