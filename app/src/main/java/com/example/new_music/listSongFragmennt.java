@@ -1,95 +1,62 @@
 package com.example.new_music;
 
-import android.content.SharedPreferences;
+import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class listSongFragmennt extends baseListSong implements LoaderManager.LoaderCallbacks<Cursor> {
-//    private RecyclerView mRecyclerView;
-//    protected SongAdapter mAdapter;
-    private static final int LOADER_ID = 1;
-    private String[] projection={MediaStore.Audio.AudioColumns.DATA,MediaStore.Audio.AudioColumns.ALBUM,MediaStore.Audio.AudioColumns.ARTIST,MediaStore.Audio.Media.TITLE,MediaStore.Audio.Media.DURATION};
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        if(id==1)
-         return  new CursorLoader(getContext(),MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,null,null,null);
-        return null;
-    }
+public class listSongFragmennt extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.list_baihat,container,false);
+        View view = inflater.inflate(R.layout.list_baihat, container, false);
+        RecyclerView recycleview = view.findViewById(R.id.recyclerview);
+        recycleview.setHasFixedSize(true);
+        @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recycleview.setLayoutManager(linearLayoutManager);
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 
+        String[] projection = {
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.DURATION
+        };
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+        Cursor cursor = getActivity().managedQuery(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                selection,
+                null,
+                null);
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor c) {
-       ArrayList<Song> listMusic = new ArrayList<>();
-        int id = 0;
-        if (c != null && c.getCount() > 0) {
-            c.moveToFirst();
-            do {
-                String path = c.getString(0);
-                String album = c.getString(1);
-                String artist = c.getString(2);
-                String name = c.getString(3);
-                String duration = c.getString(4);
-                listMusic.add(new Song(id, name, path, artist, Integer.parseInt(duration)));
-                Log.d("info", " Album :" + album);
-                Log.d("Path :" + path, " Artist :" + artist + " Duration " + duration);
-                id++;
-            } while (c.moveToNext());
+        ArrayList<Song> songs = new ArrayList<>();
+        int id=1;
+        while (cursor.moveToNext()) {
+            songs.add(new Song(id, cursor.getString(2), Integer.parseInt(cursor.getString(5)),R.drawable.ic_more_vert_black_24dp,cursor.getString(3)));
+            Log.d("giatri", cursor.getString(3));
+            id++;
         }
-        setlist(listMusic);
-    }
-
-
-    @Override
-    public void onLoaderReset(@NonNull Loader loader) {
-        if (mAdapter != null) {
-            mAdapter.setSong(new ArrayList<Song>());
-        }
+        SongAdapter baihatAdapter = new SongAdapter(songs, getContext());
+        recycleview.setAdapter(baihatAdapter);
+        return view;
     }
 }
+
 
 
 

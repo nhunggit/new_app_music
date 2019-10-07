@@ -15,75 +15,64 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
-    private ArrayList<Song> mListSong=new ArrayList<>();
-    private ArrayList<Song > mSong;
-    private LayoutInflater mInflater;
-    private Context context;
-    private OnClickItemView mClickItemmView;
-    private String mTypeSong;
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder> {
 
-    public SongAdapter(Context context,ArrayList<Song> listMusic) {
-        this.mSong=listMusic;
-        this.context=context;
+    ArrayList<Song > mSong;
+     Context mcontext;
+
+    public void setmSong(ArrayList<Song> mSong) {
+        this.mSong = mSong;
     }
 
+    public SongAdapter(ArrayList<Song> mSong, Context mcontext) {
+        this.mSong = mSong;
+        this.mcontext = mcontext;
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view=mInflater.inflate(R.layout.item_baihat,parent,false);
-
-        return  new ViewHolder(view);
+    public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
+        View itemView=layoutInflater.inflate(R.layout.item_baihat,parent,false);
+        return new WordViewHolder(itemView,this);
     }
 
     @Override
-        public void onBindViewHolder(@NonNull final ViewHolder holder, int position){
-            if (mSong != null) {
-                final Song current = mSong.get(position);
-                holder.mStt.setText(current.getId() + "");
-                holder.mNameSong.setText(current.getTitle());
-                SimpleDateFormat formatTime = new SimpleDateFormat("mm:ss");
-                holder.mHour.setText(formatTime.format(current.getDuration()));
-                final Song finalCurrent = current;
-                holder.mConstraintLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mClickItemmView.clickItem(finalCurrent);
-                    }
-                });
-            }
-        }
-
-    public void setSong(ArrayList<Song> songs) {
-        mSong = songs;
-        Log.d("size2", songs.size() + "//");
-        notifyDataSetChanged();
+    public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
+        holder.mstt.setText(mSong.get(position).getId()+"");
+        holder.mnameSong.setText(mSong.get(position).getTitle());
+        holder.mHours.setText(mSong.get(position).getDuration()+"");
+        holder.mMore.setImageResource(mSong.get(position).getArtist());
     }
 
     @Override
     public int getItemCount() {
-            if(mSong!=null)
-                return mSong.size();
-            else
-                return 0;
+        return mSong.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mNameSong, mHour;
+
+    public class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mstt;
+        TextView mnameSong;
+        TextView mHours;
         ImageButton mMore;
-        TextView mStt;
-        ConstraintLayout mConstraintLayout;
-        public ViewHolder(@NonNull View itemView) {
+        final SongAdapter mAdapter;
+        public WordViewHolder(@NonNull View itemView,SongAdapter adapter) {
             super(itemView);
-            mConstraintLayout=itemView.findViewById(R.id.constraintLayoutItem);
-            mNameSong=itemView.findViewById(R.id.namesong);
-            mHour=itemView.findViewById(R.id.hours);
-            mStt=itemView.findViewById(R.id.stt);
-            mMore=itemView.findViewById(R.id.more);
+            this.mAdapter=adapter;
+             mstt=(TextView)itemView.findViewById(R.id.stt);
+            mnameSong=(TextView)itemView.findViewById(R.id.namesong);
+             mHours=(TextView)itemView.findViewById(R.id.hours);
+             mMore=(ImageButton)itemView.findViewById(R.id.more);
         }
-    }
-    interface OnClickItemView{
-        void clickItem(Song song);
+
+
+        @Override
+        public void onClick(View view) {
+            int mposition=getLayoutPosition();
+            Song element =mSong.get(mposition);
+            mSong.set(mposition,element);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
