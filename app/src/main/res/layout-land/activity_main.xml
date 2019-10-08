@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:layout_weight="10"
     tools:ignore="MissingDefaultResource">
-
     <fragment
         android:id="@+id/fragment1"
         android:name="com.example.new_music.listSongFragmennt"

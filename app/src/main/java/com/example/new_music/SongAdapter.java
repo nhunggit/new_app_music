@@ -19,6 +19,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
 
     ArrayList<Song > mSong;
      Context mcontext;
+     OnClickItemView onClickItemView;
 
     public void setmSong(ArrayList<Song> mSong) {
         this.mSong = mSong;
@@ -74,5 +75,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
             mSong.set(mposition,element);
             mAdapter.notifyDataSetChanged();
         }
+
+    }
+    interface OnClickItemView{
+        void ClickItem(Song song);
     }
 }
