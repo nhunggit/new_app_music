@@ -7,7 +7,7 @@ public class Song {
 
     private  String file;
 
-    private int artist;
+    private String artist;
 
     private int duration;
 
@@ -25,7 +25,7 @@ public class Song {
         return file;
     }
 
-    public int getArtist() {
+    public String getArtist() {
         return artist;
     }
 
@@ -35,7 +35,7 @@ public class Song {
 
 
 
-    public Song(int id, String title,  int duration , int artist, String file) {
+    public Song(int id, String title,  int duration , String artist, String file) {
         this.title=title;
         this.id=id;
        this.file=file;

@@ -43,7 +43,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
         holder.mstt.setText(mSong.get(position).getId()+"");
         holder.mnameSong.setText(mSong.get(position).getTitle());
         holder.mHours.setText(mSong.get(position).getDuration()+"");
-        holder.mMore.setImageResource(mSong.get(position).getArtist());
+        holder.mMore.setImageResource(R.drawable.ic_more_vert_black_24dp);
     }
 
     @Override
