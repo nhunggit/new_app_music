@@ -1,19 +1,47 @@
 package com.example.new_music;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity {
+
+    MyService myService;
+    boolean mBound=false;
+
+    private ServiceConnection mConnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyService.LocalBinder binder=(MyService.LocalBinder) service;
+            myService=binder.getService();
+            Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
+            mBound=true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound=false;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent=new Intent(this,MyService.class);
-        startService(intent);
+//        startService(intent);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        Fragment fragmentlistBaihat = new listSongFragmennt(intent);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, fragmentlistBaihat).commit();
 
     }
 
@@ -23,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
         MenuItem search=menu.findItem(R.id.timkiem);
         SearchView searchView=(SearchView)search.getActionView();
         return super.onCreateOptionsMenu(menu);
+
     }
 }
-//       Fragment fragmentlistBaihat = new fragmentListBaihat();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist, fragmentlistBaihat).commit();
+
 //        //contentProvider contentProvider=new contentProvider();
 //        //contentProvider.onCreate();
 ////        Fragment fragmentbaihat=new fragmentBaihat();

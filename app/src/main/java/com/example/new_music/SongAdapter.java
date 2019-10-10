@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -20,6 +21,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
     ArrayList<Song > mSong;
      Context mcontext;
      OnClickItemView onClickItemView;
+     MyService myService;
+
 
     public void setmSong(ArrayList<Song> mSong) {
         this.mSong = mSong;
@@ -39,11 +42,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WordViewHolder holder, final int position) {
         holder.mstt.setText(mSong.get(position).getId()+"");
         holder.mnameSong.setText(mSong.get(position).getTitle());
         holder.mHours.setText(mSong.get(position).getDuration()+"");
         holder.mMore.setImageResource(R.drawable.ic_more_vert_black_24dp);
+        final Song Currentposition=mSong.get(position);
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                    onClickItemView.ClickItem(Currentposition);
+            }
+        });
     }
 
     @Override
@@ -57,6 +67,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
         TextView mnameSong;
         TextView mHours;
         ImageButton mMore;
+        ConstraintLayout constraintLayout;
         final SongAdapter mAdapter;
         public WordViewHolder(@NonNull View itemView,SongAdapter adapter) {
             super(itemView);
@@ -65,6 +76,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
             mnameSong=(TextView)itemView.findViewById(R.id.namesong);
              mHours=(TextView)itemView.findViewById(R.id.hours);
              mMore=(ImageButton)itemView.findViewById(R.id.more);
+             constraintLayout=(ConstraintLayout)itemView.findViewById(R.id.constraintLayoutItem);
         }
 
 

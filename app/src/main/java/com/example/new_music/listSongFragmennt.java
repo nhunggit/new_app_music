@@ -13,34 +13,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class listSongFragmennt extends Fragment {
+public class listSongFragmennt extends Fragment implements SongAdapter.OnClickItemView {
 MyService myService;
-boolean mBound=false;
+ConstraintLayout constraintLayout;
+Intent intent;
+private int position=0;
 
-    private ServiceConnection mConnection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MyService.LocalBinder binder=(MyService.LocalBinder) service;
-            myService=binder.getService();
-            mBound=true;
-        }
+    public listSongFragmennt(Intent intent) {
+        this.intent=intent;
+    }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBound=false;
-        }
-    };
-
-    @Override
+/*@Override
     public void onStart() {
         super.onStart();
         Intent intent=new Intent(getContext(),MyService.class);
@@ -54,20 +50,16 @@ boolean mBound=false;
             myService.unbindService(mConnection);
             mBound=false;
         }
-    }
-    public void onButtonClick(View v){
-        if(mBound){
-            //gọi 1 phương thức từ service
-            //
-            int num=myService.
-        }
-    }
+    }*/
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_baihat, container, false);
         RecyclerView recycleview = view.findViewById(R.id.recyclerview);
+        constraintLayout=view.findViewById(R.id.constraintLayoutItem);
         recycleview.setHasFixedSize(true);
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
@@ -98,10 +90,20 @@ boolean mBound=false;
         }
         SongAdapter baihatAdapter = new SongAdapter(songs, getContext());
         recycleview.setAdapter(baihatAdapter);
+
         return view;
     }
 
 
+    @Override
+    public void ClickItem(Song song) {
+        myService.getPosition(song.getId());
+        try {
+            myService.playSong(song.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
