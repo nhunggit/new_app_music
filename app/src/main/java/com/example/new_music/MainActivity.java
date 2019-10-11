@@ -2,21 +2,29 @@ package com.example.new_music;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     MyService myService;
     boolean mBound=false;
+    Fragment fragmentlistBaihat;
 
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             MyService.LocalBinder binder=(MyService.LocalBinder) service;
             myService=binder.getService();
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
+            ((listSongFragmennt)fragmentlistBaihat).setMyService(myService);
             mBound=true;
         }
 
@@ -33,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent=new Intent(this,MyService.class);
-//        startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        Fragment fragmentlistBaihat = new listSongFragmennt(intent);
+        fragmentlistBaihat = new listSongFragmennt();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, fragmentlistBaihat).commit();
 
     }
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
     }
+
+
 }
 
 //        //contentProvider contentProvider=new contentProvider();

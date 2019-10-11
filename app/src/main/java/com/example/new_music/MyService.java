@@ -20,15 +20,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MyService extends Service {
-    private final IBinder mBinder=new LocalBinder();
-    private final Random mRandom=new Random();
+    private final IBinder mBinder = new LocalBinder();
+    private final Random mRandom = new Random();
     private MediaPlayer mediaPlayer;
-    private ArrayList<Song> listsong=new ArrayList<>();
+    private ArrayList<Song> listsong = new ArrayList<>();
     private int position;
-
-    public IBinder getmBinder() {
-        return mBinder;
-    }
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -41,38 +37,41 @@ public class MyService extends Service {
     public int getPosition() {
         return position;
     }
-    public void getPosition(int position){
-        this.position=position;
+
+    public void getPosition(int position) {
+        this.position = position;
     }
 
-    public class LocalBinder extends Binder{
-        MyService getService(){
+    public class LocalBinder extends Binder {
+        MyService getService() {
             return MyService.this;
         }
     }
-    public boolean isMusicPlay(){
-        if(mediaPlayer!=null){
+
+    public boolean isMusicPlay() {
+        if (mediaPlayer != null) {
             return true;
         }
         return false;
     }
-    public void playSong(int mPositionCurrent) throws IOException {
-        mediaPlayer=new MediaPlayer();
-        if(mediaPlayer.isPlaying()){
-            mediaPlayer.pause();
-        }
-        for(int i=0;i<listsong.size();i++){
-            if(listsong.get(i).getId()==mPositionCurrent){
-                Uri uri=Uri.parse(listsong.get(i).getFile());
-                mediaPlayer.setDataSource(getApplicationContext(),uri);
-                mediaPlayer.prepare();
-                mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.start();
-
-            }
-        }
+    public void pauseSong(Song song){
+        mediaPlayer.pause();
     }
+
+    public void playSong(Song song) throws IOException {
+        mediaPlayer = new MediaPlayer();
+//        if (mediaPlayer.isPlaying()) {
+//            mediaPlayer.pause();
+//        } else {
+            Uri uri = Uri.parse(song.getFile());
+            mediaPlayer.setDataSource(getApplicationContext(), uri);
+            mediaPlayer.prepare();
+            mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.start();
+        }
+ //   }
+
 
     @Nullable
     @Override

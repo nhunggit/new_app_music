@@ -47,13 +47,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
         holder.mnameSong.setText(mSong.get(position).getTitle());
         holder.mHours.setText(mSong.get(position).getDuration()+"");
         holder.mMore.setImageResource(R.drawable.ic_more_vert_black_24dp);
-        final Song Currentposition=mSong.get(position);
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                    onClickItemView.ClickItem(Currentposition);
-            }
-        });
+
+    }
+
+    public void setOnClickItemView(OnClickItemView onClickItemView){
+        this.onClickItemView = onClickItemView;
     }
 
     @Override
@@ -77,19 +75,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
              mHours=(TextView)itemView.findViewById(R.id.hours);
              mMore=(ImageButton)itemView.findViewById(R.id.more);
              constraintLayout=(ConstraintLayout)itemView.findViewById(R.id.constraintLayoutItem);
+             itemView.setOnClickListener(this);
         }
 
 
         @Override
         public void onClick(View view) {
-            int mposition=getLayoutPosition();
-            Song element =mSong.get(mposition);
-            mSong.set(mposition,element);
-            mAdapter.notifyDataSetChanged();
+            onClickItemView.ClickItem(getAdapterPosition());
         }
 
     }
     interface OnClickItemView{
-        void ClickItem(Song song);
+        void ClickItem(int position);
     }
 }
