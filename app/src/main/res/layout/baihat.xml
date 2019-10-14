@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:scaleX="2"
         android:scaleY="2"
-        android:src="@drawable/default_cover_art"
         />
     <LinearLayout
         android:orientation="vertical"
@@ -64,7 +63,6 @@
                 android:layout_marginLeft="7dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginBottom="7dp"
-                android:src="@drawable/icon_disk2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

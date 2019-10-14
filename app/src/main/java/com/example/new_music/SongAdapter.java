@@ -22,7 +22,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
      Context mcontext;
      OnClickItemView onClickItemView;
      MyService myService;
-
+     String duration="";
 
     public void setmSong(ArrayList<Song> mSong) {
         this.mSong = mSong;
@@ -45,7 +45,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
     public void onBindViewHolder(@NonNull WordViewHolder holder, final int position) {
         holder.mstt.setText(mSong.get(position).getId()+"");
         holder.mnameSong.setText(mSong.get(position).getTitle());
-        holder.mHours.setText(mSong.get(position).getDuration()+"");
+        SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
+        holder.mHours.setText(formmatTime.format(mSong.get(position).getDuration()));
         holder.mMore.setImageResource(R.drawable.ic_more_vert_black_24dp);
 
     }

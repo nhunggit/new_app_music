@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,11 +26,32 @@ public class MyService extends Service {
     private final Random mRandom = new Random();
     private MediaPlayer mediaPlayer;
     private String nameSong="";
+    private String nameArtist="";
+    private String potoMusic="";
+    private int timeFinish=0;
     private int currentPosition;
+    private boolean shuffleSong=false;
+    private int minIndex;
+
+    public void setMinIndex(int minIndex) {
+        this.minIndex = minIndex;
+    }
 
     public int getCurrentPostion(){
         currentPosition=mediaPlayer.getCurrentPosition();
         return currentPosition;
+    }
+    public String getNameArtist(){
+        return nameArtist;
+    }
+    public String getPotoMusic(){
+        return potoMusic;
+    }
+    public int getTimeFinish(){
+        return timeFinish;
+    }
+    public String getNameSong(){
+        return nameSong;
     }
 
     private ArrayList<Song> listsong = new ArrayList<>();
@@ -60,6 +82,11 @@ public class MyService extends Service {
         }
     }
 
+    public int actionShuffleSong(){
+        Random rd = new Random();
+        int result = rd.nextInt(listsong.size() - 1);
+        return result;
+    }
 
     public boolean isMusicPlay() {
         if (mediaPlayer != null) {
@@ -87,8 +114,23 @@ public class MyService extends Service {
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.start();
+            nameSong=song.getTitle();
+            nameArtist=song.getArtist();
+            potoMusic=song.getFile();
+            timeFinish=song.getDuration();
         }
     }
+
+    public void nextSong() throws IOException {
+        mediaPlayer.pause();
+        playSong(listsong.get(position++));
+    }
+
+    public String getDuration() {
+        SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
+        return formmatTime.format(mediaPlayer.getDuration());
+    }
+
 
 
 
