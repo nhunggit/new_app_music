@@ -120,7 +120,9 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     @Override
     public void ClickItem(int position) {
         Log.d("abc", "ClickItem: "+myService);
+        myService.setListSong(songs);
         NameSongPlaying.setText(songs.get(position).getTitle());
+        Log.d("position", "ClickItem: "+position);
         Bitmap bitmap=getAlbumn(songs.get(position).getFile());
         Log.d("nhung", "ClickItem: "+bitmap);
         disk.setImageBitmap(bitmap);

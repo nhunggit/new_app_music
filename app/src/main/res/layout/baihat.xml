@@ -122,6 +122,7 @@
 
             <ImageView
                 android:id="@+id/shuffle"
+                android:src="@drawable/ic_shuffle_black_50dp"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="30dp"

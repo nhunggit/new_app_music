@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class MyService extends Service {
     private String nameArtist="";
     private String potoMusic="";
     private int timeFinish=0;
-    private int currentPosition;
+    private int currentPosition=0;
     private boolean shuffleSong=false;
     private int minIndex;
 
@@ -37,8 +38,8 @@ public class MyService extends Service {
         this.minIndex = minIndex;
     }
 
+
     public int getCurrentPostion(){
-        currentPosition=mediaPlayer.getCurrentPosition();
         return currentPosition;
     }
     public String getNameArtist(){
@@ -61,19 +62,16 @@ public class MyService extends Service {
         return mediaPlayer;
     }
 
+    public void setListSong(ArrayList<Song> mListAllSong) {
+        this.listsong = mListAllSong;
+    }
+
     public ArrayList<Song> getListsong() {
         return listsong;
     }
 
     public int getPosition() {
         return position;
-    }
-
-    public void getPosition(int position) {
-        this.position = position;
-    }
-    public int getCurrentSong(){
-        return mediaPlayer.getDuration();
     }
 
     public class LocalBinder extends Binder {
@@ -87,6 +85,13 @@ public class MyService extends Service {
         int result = rd.nextInt(listsong.size() - 1);
         return result;
     }
+    public boolean isShuffleSong(){
+        return shuffleSong;
+    }
+    public void setShuffleSong(boolean shuffleSong){
+        this.shuffleSong=shuffleSong;
+    }
+
 
     public boolean isMusicPlay() {
         if (mediaPlayer != null) {
@@ -118,12 +123,23 @@ public class MyService extends Service {
             nameArtist=song.getArtist();
             potoMusic=song.getFile();
             timeFinish=song.getDuration();
+            minIndex=song.getId()-1;
         }
     }
 
     public void nextSong() throws IOException {
         mediaPlayer.pause();
-        playSong(listsong.get(position++));
+        if(shuffleSong==true){
+            minIndex=actionShuffleSong();
+        }else{
+            if(minIndex==listsong.size())
+                minIndex=0;
+            else
+                minIndex++;
+        }
+        Log.d("ab", "nextSong: "+minIndex);
+        playSong(listsong.get(minIndex));
+
     }
 
     public String getDuration() {

@@ -38,7 +38,7 @@ public class songFragment extends Fragment {
     ImageView previous;
     ImageView repeat;
     ImageView shuffle;
-    int i=0;
+    int position=0;
 
     @Nullable
     @Override
@@ -58,21 +58,34 @@ public class songFragment extends Fragment {
         repeat=(ImageView)view.findViewById(R.id.repeat);
         shuffle=(ImageView)view.findViewById(R.id.shuffle);
         previous=(ImageView)view.findViewById(R.id.previous);
-//        next.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                if (myService != null) {
-//                    try {
-//                        myService.nextSong();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    seekBar.setMax(Integer.parseInt(myService.getDuration()));
-//                    updateUI();
-//                }
-//            }
-//        });
+        position=myService.getPosition();
+        shuffle.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                if(myService.isShuffleSong()){
+                    myService.setShuffleSong(false);
+                    shuffle.setBackgroundResource(R.drawable.ic_shuffle_black_50dp);
+                }else{
+                    myService.setShuffleSong(true);
+                    shuffle.setBackgroundResource(R.drawable.ic_shuffle_yellow_24dp);
+                }
+            }
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (myService != null) {
+                    try {
+                        myService.nextSong();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    seekBar.setMax(Integer.parseInt(myService.getDuration()));
+                }
+            }
+        });
         updateUI();
         return view;
         }
