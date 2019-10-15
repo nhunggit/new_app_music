@@ -35,7 +35,7 @@ public class Song {
 
 
 
-    public Song(int id, String title,  int duration , String artist, String file) {
+    public Song(int id, String title, String file , String artist, int duration) {
         this.title=title;
         this.id=id;
        this.file=file;

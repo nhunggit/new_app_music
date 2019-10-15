@@ -6,15 +6,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.IOException;
@@ -33,11 +28,19 @@ public class MyService extends Service {
     private int currentPosition=0;
     private boolean shuffleSong=false;
     private int minIndex;
+    private int loopSong=0;
 
     public void setMinIndex(int minIndex) {
         this.minIndex = minIndex;
     }
 
+    public int getLoopSong() {
+        return loopSong;
+    }
+
+    public void setLoopSong(int loopSong) {
+        this.loopSong = loopSong;
+    }
 
     public int getCurrentPostion(){
         return currentPosition;
@@ -127,19 +130,40 @@ public class MyService extends Service {
         }
     }
 
+    private void updateTime(){
+
+    }
+
     public void nextSong() throws IOException {
-        mediaPlayer.pause();
+        mediaPlayer.stop();
         if(shuffleSong==true){
             minIndex=actionShuffleSong();
-        }else{
+        }
+        else{
+            minIndex++;
             if(minIndex==listsong.size())
                 minIndex=0;
-            else
-                minIndex++;
         }
         Log.d("ab", "nextSong: "+minIndex);
         playSong(listsong.get(minIndex));
 
+    }
+    public void previousSong() throws IOException {
+        mediaPlayer.stop();
+        if(shuffleSong==true){
+            minIndex=actionShuffleSong();
+        }
+        else{
+            minIndex--;
+            if(minIndex==0)
+                minIndex=listsong.size()-1;
+        }
+        Log.d("ab", "nextSong: "+minIndex);
+        playSong(listsong.get(minIndex));
+
+    }
+    public int getDurationSong(){
+        return mediaPlayer.getDuration();
     }
 
     public String getDuration() {

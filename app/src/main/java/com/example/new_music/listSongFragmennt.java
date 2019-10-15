@@ -25,6 +25,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +42,8 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     TextView NameSongPlaying;
     ImageButton buttonPlay;
     ImageView disk;
+    SongAdapter baihatAdapter;
+    RecyclerView recycleview;
     private int position=0;
     private songFragment songFragment=new songFragment();
     ArrayList<Song> songs = new ArrayList<>();
@@ -49,7 +54,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_baihat, container, false);
-        RecyclerView recycleview = view.findViewById(R.id.recyclerview);
+        recycleview = view.findViewById(R.id.recyclerview);
         constraintLayout=view.findViewById(R.id.constraintLayoutItem);
         NameSongPlaying=view.findViewById(R.id.namePlaySong);
         buttonPlay=view.findViewById(R.id.play);
@@ -75,12 +80,11 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
                 selection,
                 null,
                 null);
-
-        int id=1;
+        int id=0;
         while (cursor.moveToNext()) {
-            songs.add(new Song(id, cursor.getString(2), Integer.parseInt(cursor.getString(5)),cursor.getString(1),cursor.getString(3)));
-            Log.d("giatri", cursor.getString(3));
             id++;
+            songs.add(new Song(id,cursor.getString(2),cursor.getString(3),cursor.getString(1),Integer.parseInt(cursor.getString(5))));
+            Log.d("giatri", cursor.getString(3));
         }
         SongAdapter baihatAdapter = new SongAdapter(songs, getContext());
         recycleview.setAdapter(baihatAdapter);
@@ -144,6 +148,43 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     public void setMyService(MyService service){
         this.myService = service;
     }
+
+//    @NonNull
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+//        String[] projection={MediaStore.Audio.Media._ID,
+//                MediaStore.Audio.Media.ARTIST,
+//                MediaStore.Audio.Media.TITLE,
+//                MediaStore.Audio.Media.DATA,
+//                MediaStore.Audio.Media.DISPLAY_NAME,
+//                MediaStore.Audio.Media.DURATION};
+//        CursorLoader cursorLoader=new CursorLoader(getContext(),MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection,null,null,null);
+//        return cursorLoader;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+//        ArrayList<Song> listSong=new ArrayList<>();
+//        if(data!=null && data.getCount()>0){
+//            data.moveToFirst();
+//            do{
+//                int id=Integer.parseInt(data.getString(0));
+//                String title=data.getString(2);
+//                String file=data.getString(3);
+//                String artist=data.getString(1);
+//                int duration=Integer.parseInt(data.getString(5));
+//                Song song=new Song(id,title,file,artist,duration);
+//            }while(data.moveToNext());
+//            baihatAdapter = new SongAdapter(songs, getContext());
+//            recycleview.setAdapter(baihatAdapter);
+//            baihatAdapter.setOnClickItemView(this);
+//        }
+//    }
+//
+//    @Override
+//    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+//
+//    }
 }
 
 

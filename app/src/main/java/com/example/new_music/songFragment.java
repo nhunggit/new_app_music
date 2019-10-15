@@ -59,6 +59,9 @@ public class songFragment extends Fragment {
         shuffle=(ImageView)view.findViewById(R.id.shuffle);
         previous=(ImageView)view.findViewById(R.id.previous);
         position=myService.getPosition();
+        if(myService!=null){
+            seekBar.setMax(myService.getDurationSong());
+        }
         shuffle.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -82,8 +85,60 @@ public class songFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    seekBar.setMax(Integer.parseInt(myService.getDuration()));
+                    updateUI();
                 }
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myService != null) {
+                    try {
+                        myService.previousSong();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    updateUI();
+                }
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                myService.getMediaPlayer().seekTo(seekBar.getProgress());
+            }
+        });
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(myService.getLoopSong()==0){
+                    myService.setLoopSong(-1);
+                }
+            }
+        });
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(myService.isPlaying()){
+                    myService.pauseSong();
+                }else {
+                    try {
+                        myService.playSong(myService.getListsong().get(position));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                updateUI();
             }
         });
         updateUI();
