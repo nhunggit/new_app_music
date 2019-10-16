@@ -2,10 +2,14 @@ package com.example.new_music;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -24,6 +28,7 @@ public class MyService extends Service {
     private String nameSong="";
     private String nameArtist="";
     private String potoMusic="";
+    private String file="";
     private int timeFinish=0;
     private int currentPosition=0;
     private boolean shuffleSong=false;
@@ -40,6 +45,14 @@ public class MyService extends Service {
 
     public void setLoopSong(int loopSong) {
         this.loopSong = loopSong;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public int getMinIndex() {
+        return minIndex;
     }
 
     public int getCurrentPostion(){
@@ -82,6 +95,12 @@ public class MyService extends Service {
             return MyService.this;
         }
     }
+    public Bitmap getAlbumn(String path){
+        MediaMetadataRetriever metadataRetriever=new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(path);
+        byte[] data=metadataRetriever.getEmbeddedPicture();
+        return data==null?null: BitmapFactory.decodeByteArray(data,0,data.length);
+    }
 
     public int actionShuffleSong(){
         Random rd = new Random();
@@ -112,6 +131,7 @@ public class MyService extends Service {
     }
 
     public void playSong(Song song) throws IOException {
+        Log.d("ok", "onClick: "+ listsong.size()+"///"+position);
         mediaPlayer = new MediaPlayer();
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -125,14 +145,14 @@ public class MyService extends Service {
             nameSong=song.getTitle();
             nameArtist=song.getArtist();
             potoMusic=song.getFile();
+            file=song.getFile();
             timeFinish=song.getDuration();
             minIndex=song.getId()-1;
+
         }
     }
 
-    private void updateTime(){
 
-    }
 
     public void nextSong() throws IOException {
         mediaPlayer.stop();
@@ -166,9 +186,46 @@ public class MyService extends Service {
         return mediaPlayer.getDuration();
     }
 
+
     public String getDuration() {
         SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
         return formmatTime.format(mediaPlayer.getDuration());
+    }
+    public void updateTime(){
+        final Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        try {
+                            onCompletionSong();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                handler.postDelayed(this,500);
+            }
+        },100);
+    }
+    public void onCompletionSong() throws IOException {
+        mediaPlayer.pause();
+        if(loopSong==0){
+            if(minIndex<listsong.size()-1){
+                minIndex++;
+            }
+        }else{
+            if(loopSong==-1){
+                if(minIndex==listsong.size()-1){
+                    minIndex=0;
+                }else{
+                    minIndex++;
+                }
+            }
+        }
+        playSong(listsong.get(minIndex));
     }
 
 

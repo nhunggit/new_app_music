@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -33,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class listSongFragmennt extends Fragment implements SongAdapter.OnClickItemView {
@@ -40,6 +42,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     ConstraintLayout constraintLayout;
     ConstraintLayout mConstraitLayout;
     TextView NameSongPlaying;
+    TextView artist;
     ImageButton buttonPlay;
     ImageView disk;
     SongAdapter baihatAdapter;
@@ -58,6 +61,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         constraintLayout=view.findViewById(R.id.constraintLayoutItem);
         NameSongPlaying=view.findViewById(R.id.namePlaySong);
         buttonPlay=view.findViewById(R.id.play);
+        artist=view.findViewById(R.id.Artist);
         mConstraitLayout=view.findViewById(R.id.constraintLayout);
         disk=view.findViewById(R.id.disk);
         recycleview.setHasFixedSize(true);
@@ -101,49 +105,60 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
             public void onClick(View v) {
                 if(myService.isPlaying()){
                     myService.pauseSong();
-                    buttonPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 }else{
                     try {
                         myService.playSong(songs.get(position));
-                        buttonPlay.setImageResource(R.drawable.ic_pause);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+                updateUI();
             }
         });
+        if(myService!=null){
+            updateUI();
+        }
         return view;
     }
-    private Bitmap getAlbumn(String path){
-        MediaMetadataRetriever metadataRetriever=new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(path);
-        byte[] data=metadataRetriever.getEmbeddedPicture();
-        return data==null?null: BitmapFactory.decodeByteArray(data,0,data.length);
+
+    public void updateUI(){
+
+        if(myService.isMusicPlay()){
+            Log.d("abc1", "ClickItem: "+myService.getNameSong());
+            //constraintLayout.setVisibility(View.VISIBLE);
+            myService.updateTime();
+            if(myService.isPlaying()){
+                buttonPlay.setImageResource(R.drawable.ic_pause);
+            }else
+                buttonPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            disk.setImageBitmap(myService.getAlbumn(myService.getFile()));
+            NameSongPlaying.setText(myService.getNameSong());
+            artist.setText(myService.getNameArtist());
+        }
     }
 
     @Override
     public void ClickItem(int position) {
-        Log.d("abc", "ClickItem: "+myService);
-        myService.setListSong(songs);
-        NameSongPlaying.setText(songs.get(position).getTitle());
-        Log.d("position", "ClickItem: "+position);
-        Bitmap bitmap=getAlbumn(songs.get(position).getFile());
-        Log.d("nhung", "ClickItem: "+bitmap);
-        disk.setImageBitmap(bitmap);
         try {
-            if(!myService.isMusicPlay()) {
-                myService.playSong(songs.get(position));
-                buttonPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-            }else{
-                myService.pauseSong();
-                myService.playSong(songs.get(position));
-                buttonPlay.setImageResource(R.drawable.ic_pause);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            myService.setListSong(songs);
+        if (myService.isMusicPlay()) {
+        if (!myService.isPlaying()) {
+                    myService.playSong(songs.get(position));
+                } else {
+                    myService.pauseSong();
+                    myService.playSong(songs.get(position));
+                }
 
+
+        }
+        else {
+            myService.playSong(songs.get(position));
+        }
+            updateUI();
+        } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
 
     public void setMyService(MyService service){
         this.myService = service;

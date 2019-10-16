@@ -2,6 +2,7 @@ package com.example.new_music;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.text.SimpleDateFormat;
 import android.icu.text.Transliterator;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
@@ -59,6 +60,9 @@ public class songFragment extends Fragment {
         shuffle=(ImageView)view.findViewById(R.id.shuffle);
         previous=(ImageView)view.findViewById(R.id.previous);
         position=myService.getPosition();
+        if(myService.isPlaying()){
+            updateUI();
+        }
         if(myService!=null){
             seekBar.setMax(myService.getDurationSong());
         }
@@ -123,6 +127,15 @@ public class songFragment extends Fragment {
             public void onClick(View v) {
                 if(myService.getLoopSong()==0){
                     myService.setLoopSong(-1);
+                    repeat.setImageResource(R.drawable.ic_repeat_yellow_24dp);
+                }else{
+                    if(myService.getLoopSong()==1){
+                        myService.setLoopSong(0);
+                        repeat.setImageResource(R.drawable.ic_repeat_white_24dp);
+                    }else{
+                        myService.setLoopSong(1);
+                        repeat.setImageResource(R.drawable.ic_repeat_one_yellow_24dp);
+                    }
                 }
             }
         });
@@ -133,7 +146,8 @@ public class songFragment extends Fragment {
                     myService.pauseSong();
                 }else {
                     try {
-                        myService.playSong(myService.getListsong().get(position));
+//                        Log.d("ok", "onClick: "+myService.getListsong().size()+"///"+position);
+                        myService.playSong(myService.getListsong().get(myService.getMinIndex()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -141,9 +155,9 @@ public class songFragment extends Fragment {
                 updateUI();
             }
         });
-        updateUI();
         return view;
         }
+
     private Bitmap getAlbumn(String path){
         MediaMetadataRetriever metadataRetriever=new MediaMetadataRetriever();
         metadataRetriever.setDataSource(path);
