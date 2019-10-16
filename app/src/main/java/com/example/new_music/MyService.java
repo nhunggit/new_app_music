@@ -29,34 +29,21 @@ public class MyService extends Service {
     private String nameArtist="";
     private String potoMusic="";
     private String file="";
-    private int timeFinish=0;
-    private int currentPosition=0;
     private boolean shuffleSong=false;
     private int minIndex;
     private int loopSong=0;
 
-    public void setMinIndex(int minIndex) {
-        this.minIndex = minIndex;
-    }
-
     public int getLoopSong() {
         return loopSong;
     }
-
     public void setLoopSong(int loopSong) {
         this.loopSong = loopSong;
     }
-
     public String getFile() {
         return file;
     }
-
     public int getMinIndex() {
         return minIndex;
-    }
-
-    public int getCurrentPostion(){
-        return currentPosition;
     }
     public String getNameArtist(){
         return nameArtist;
@@ -64,32 +51,19 @@ public class MyService extends Service {
     public String getPotoMusic(){
         return potoMusic;
     }
-    public int getTimeFinish(){
-        return timeFinish;
-    }
     public String getNameSong(){
         return nameSong;
     }
-
     private ArrayList<Song> listsong = new ArrayList<>();
-    private int position;
-
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
-
     public void setListSong(ArrayList<Song> mListAllSong) {
         this.listsong = mListAllSong;
     }
-
     public ArrayList<Song> getListsong() {
         return listsong;
     }
-
-    public int getPosition() {
-        return position;
-    }
-
     public class LocalBinder extends Binder {
         MyService getService() {
             return MyService.this;
@@ -101,7 +75,6 @@ public class MyService extends Service {
         byte[] data=metadataRetriever.getEmbeddedPicture();
         return data==null?null: BitmapFactory.decodeByteArray(data,0,data.length);
     }
-
     public int actionShuffleSong(){
         Random rd = new Random();
         int result = rd.nextInt(listsong.size() - 1);
@@ -113,8 +86,6 @@ public class MyService extends Service {
     public void setShuffleSong(boolean shuffleSong){
         this.shuffleSong=shuffleSong;
     }
-
-
     public boolean isMusicPlay() {
         if (mediaPlayer != null) {
             return true;
@@ -129,9 +100,18 @@ public class MyService extends Service {
     public void pauseSong(){
         mediaPlayer.stop();
     }
+    public int getDurationSong(){
+        return mediaPlayer.getDuration();
+    }
+    public int getCurrentTime(){
+        return mediaPlayer.getCurrentPosition();
+    }
+    public String getDuration() {
+        SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
+        return formmatTime.format(mediaPlayer.getDuration());
+    }
 
     public void playSong(Song song) throws IOException {
-        Log.d("ok", "onClick: "+ listsong.size()+"///"+position);
         mediaPlayer = new MediaPlayer();
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -146,13 +126,10 @@ public class MyService extends Service {
             nameArtist=song.getArtist();
             potoMusic=song.getFile();
             file=song.getFile();
-            timeFinish=song.getDuration();
             minIndex=song.getId()-1;
 
         }
     }
-
-
 
     public void nextSong() throws IOException {
         mediaPlayer.stop();
@@ -182,15 +159,7 @@ public class MyService extends Service {
         playSong(listsong.get(minIndex));
 
     }
-    public int getDurationSong(){
-        return mediaPlayer.getDuration();
-    }
 
-
-    public String getDuration() {
-        SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
-        return formmatTime.format(mediaPlayer.getDuration());
-    }
     public void updateTime(){
         final Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
