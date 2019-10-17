@@ -42,4 +42,28 @@ public class Song {
         this.artist = artist;
         this.duration= duration;
     }
+
+    public Song(){
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 }

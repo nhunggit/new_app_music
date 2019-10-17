@@ -1,6 +1,8 @@
 package com.example.new_music;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -37,7 +41,7 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class listSongFragmennt extends Fragment implements SongAdapter.OnClickItemView {
+public class listSongFragmennt extends Fragment implements SongAdapter.OnClickItemView, LoaderManager.LoaderCallbacks<Cursor> {
     MyService myService;
     ConstraintLayout constraintLayout;
     ConstraintLayout mConstraitLayout;
@@ -53,6 +57,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     public ArrayList<Song> getListsong() {
         return songs;
     }
+    private static final int LOADER_ID = 1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,32 +72,8 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         recycleview.setHasFixedSize(true);
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
 
-        String[] projection = {
-                MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DISPLAY_NAME,
-                MediaStore.Audio.Media.DURATION
-        };
-
-        Cursor cursor = getActivity().managedQuery(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                selection,
-                null,
-                null);
-        int id=0;
-        while (cursor.moveToNext()) {
-            id++;
-            songs.add(new Song(id,cursor.getString(2),cursor.getString(3),cursor.getString(1),Integer.parseInt(cursor.getString(5))));
-            Log.d("giatri", cursor.getString(3));
-        }
-        SongAdapter baihatAdapter = new SongAdapter(songs, getContext());
-        recycleview.setAdapter(baihatAdapter);
-        baihatAdapter.setOnClickItemView(this);
         mConstraitLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +102,15 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         return view;
     }
 
+
+
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
+//
+//    }
+
     public void updateUI(){
 
         if(myService.isMusicPlay()){
@@ -137,8 +127,22 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void ClickItem(int position) {
+
+            NotificationManager notificationManager=(NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent intent=new Intent(getActivity(),Notification.class);
+            PendingIntent pendingIntent=PendingIntent.getActivity(getContext(), 1, intent,0);
+
+            android.app.Notification.Builder notificationBuidler=new android.app.Notification.Builder(getContext());
+            notificationBuidler.setContentTitle(myService.getNameSong());
+            notificationBuidler.setContentText("nhung_music");
+            notificationBuidler.setSmallIcon(R.drawable.ic_pause);
+            notificationBuidler.setContentIntent(pendingIntent);
+            notificationBuidler.setAutoCancel(true);
+            notificationManager.notify(1,notificationBuidler.build());
+
         try {
             myService.setListSong(songs);
         if (myService.isMusicPlay()) {
@@ -164,42 +168,55 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         this.myService = service;
     }
 
-//    @NonNull
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-//        String[] projection={MediaStore.Audio.Media._ID,
-//                MediaStore.Audio.Media.ARTIST,
-//                MediaStore.Audio.Media.TITLE,
-//                MediaStore.Audio.Media.DATA,
-//                MediaStore.Audio.Media.DISPLAY_NAME,
-//                MediaStore.Audio.Media.DURATION};
-//        CursorLoader cursorLoader=new CursorLoader(getContext(),MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection,null,null,null);
-//        return cursorLoader;
-//    }
-//
-//    @Override
-//    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-//        ArrayList<Song> listSong=new ArrayList<>();
-//        if(data!=null && data.getCount()>0){
-//            data.moveToFirst();
-//            do{
-//                int id=Integer.parseInt(data.getString(0));
-//                String title=data.getString(2);
-//                String file=data.getString(3);
-//                String artist=data.getString(1);
-//                int duration=Integer.parseInt(data.getString(5));
-//                Song song=new Song(id,title,file,artist,duration);
-//            }while(data.moveToNext());
-//            baihatAdapter = new SongAdapter(songs, getContext());
-//            recycleview.setAdapter(baihatAdapter);
-//            baihatAdapter.setOnClickItemView(this);
-//        }
-//    }
-//
-//    @Override
-//    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-//
-//    }
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        String[] projection={MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.DURATION};
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        CursorLoader cursorLoader=new CursorLoader(getContext(),MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection,selection,null,null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+
+        int id = 0;
+        String title="";
+        String file="";
+        String artist="";
+        int duration=0;
+        Song song=new Song();
+        if(data!=null && data.getCount()>0){
+           data.moveToFirst();
+            while(data.moveToNext()){
+                id ++;
+                song.setId(id);
+                song.setTitle(data.getString(data.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                song.setFile(data.getString(data.getColumnIndex(MediaStore.Audio.Media.DATA)));
+                song.setArtist(data.getString(data.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                song.setDuration(data.getInt(data.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                title=song.getTitle();
+                file=song.getFile();
+                artist=song.getArtist();
+                duration=song.getDuration();
+                Song songn=new Song(id,title,file,artist,duration);
+                songs.add(songn);
+            }
+            baihatAdapter = new SongAdapter(songs, getContext());
+            recycleview.setAdapter(baihatAdapter);
+            baihatAdapter.setOnClickItemView(this);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+    }
 }
 
 
