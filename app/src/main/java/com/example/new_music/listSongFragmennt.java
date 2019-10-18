@@ -127,22 +127,8 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void ClickItem(int position) {
-
-            NotificationManager notificationManager=(NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent intent=new Intent(getActivity(),Notification.class);
-            PendingIntent pendingIntent=PendingIntent.getActivity(getContext(), 1, intent,0);
-
-            android.app.Notification.Builder notificationBuidler=new android.app.Notification.Builder(getContext());
-            notificationBuidler.setContentTitle(myService.getNameSong());
-            notificationBuidler.setContentText("nhung_music");
-            notificationBuidler.setSmallIcon(R.drawable.ic_pause);
-            notificationBuidler.setContentIntent(pendingIntent);
-            notificationBuidler.setAutoCancel(true);
-            notificationManager.notify(1,notificationBuidler.build());
-
         try {
             myService.setListSong(songs);
         if (myService.isMusicPlay()) {
@@ -204,9 +190,9 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
                 file=song.getFile();
                 artist=song.getArtist();
                 duration=song.getDuration();
-                Song songn=new Song(id,title,file,artist,duration);
-                songs.add(songn);
+                songs.add(new Song(id,title,file,artist,duration));
             }
+            Log.d("size", "ClickItem: "+songs.size());
             baihatAdapter = new SongAdapter(songs, getContext());
             recycleview.setAdapter(baihatAdapter);
             baihatAdapter.setOnClickItemView(this);

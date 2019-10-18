@@ -1,5 +1,9 @@
 package com.example.new_music;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,12 +13,15 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MyService extends Service {
+    private static final String NOTIFICATION_CHANNEL_ID="1";
+    public static final String ACTION_PERVIOUS = "xxx.yyy.zzz.ACTION_PERVIOUS";
+    public static final String ACTION_PLAY = "xxx.yyy.zzz.ACTION_PLAY";
+    public static final String ACTION_NEXT = "xxx.yyy.zzz.ACTION_NEXT";
     private final IBinder mBinder = new LocalBinder();
     private final Random mRandom = new Random();
     private MediaPlayer mediaPlayer;
@@ -99,6 +110,7 @@ public class MyService extends Service {
     }
     public void pauseSong(){
         mediaPlayer.stop();
+       // showNotification(nameSong,nameArtist,potoMusic);
     }
     public int getDurationSong(){
         return mediaPlayer.getDuration();
@@ -109,6 +121,51 @@ public class MyService extends Service {
     public String getDuration() {
         SimpleDateFormat formmatTime = new SimpleDateFormat("mm:ss");
         return formmatTime.format(mediaPlayer.getDuration());
+    }
+
+    public void showNotification(String nameSong, String nameArtist, String path){
+        createNotificationChanel();
+        Intent notificationIntent=new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,notificationIntent,0);
+
+        RemoteViews mSmallNotification=new RemoteViews(getPackageName(),R.layout.small_noyification);
+        RemoteViews mNotification=new RemoteViews(getPackageName(),R.layout.notification);
+
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_music_note_black_24dp);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setCustomContentView(mSmallNotification);
+        builder.setCustomBigContentView(mNotification);
+        builder.setContentIntent(pendingIntent);
+        mNotification.setTextViewText(R.id.title,nameSong);
+        mNotification.setTextViewText(R.id.artist,nameArtist);
+        //mNotification.setImageViewResource(R.id.play, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        if(getAlbumn(path)!=null){
+            mNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
+        }else{
+            mNotification.setImageViewResource(R.id.img,R.drawable.default_cover_art);
+        }
+
+       // mSmallNotification.setImageViewResource(R.id.play, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        if(getAlbumn(path)!=null){
+            mSmallNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
+        }else{
+            mSmallNotification.setImageViewResource(R.id.img,R.drawable.default_cover_art);
+        }
+        startForeground(1, builder.build());
+    }
+
+    public void createNotificationChanel(){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel=new NotificationChannel(
+                    NotificationChannel.DEFAULT_CHANNEL_ID,
+                    "mUSIC SERVICE CHANNEL",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            NotificationManager manager=getSystemService(NotificationManager.class);
+           manager.createNotificationChannel(notificationChannel);
+        }
     }
 
     public void playSong(Song song) throws IOException {
@@ -127,6 +184,7 @@ public class MyService extends Service {
             potoMusic=song.getFile();
             file=song.getFile();
             minIndex=song.getId()-1;
+            showNotification(nameSong,nameArtist,potoMusic);
 
         }
     }
