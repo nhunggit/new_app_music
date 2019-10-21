@@ -46,6 +46,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     ConstraintLayout constraintLayout;
     ConstraintLayout mConstraitLayout;
     TextView NameSongPlaying;
+    TextView nameSong;
     TextView artist;
     ImageButton buttonPlay;
     ImageView disk;
@@ -69,6 +70,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         artist=view.findViewById(R.id.Artist);
         mConstraitLayout=view.findViewById(R.id.constraintLayout);
         disk=view.findViewById(R.id.disk);
+        nameSong=view.findViewById(R.id.namesong);
         recycleview.setHasFixedSize(true);
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
@@ -129,6 +131,8 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
 
     @Override
     public void ClickItem(int position) {
+
+        baihatAdapter.setK(0);
         try {
             myService.setListSong(songs);
         if (myService.isMusicPlay()) {
@@ -138,8 +142,6 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
                     myService.pauseSong();
                     myService.playSong(songs.get(position));
                 }
-
-
         }
         else {
             myService.playSong(songs.get(position));
@@ -148,6 +150,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         } catch (IOException e) {
         e.printStackTrace();
     }
+
     }
 
     public void setMyService(MyService service){

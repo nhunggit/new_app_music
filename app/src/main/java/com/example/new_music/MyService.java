@@ -43,6 +43,7 @@ public class MyService extends Service {
     private boolean shuffleSong=false;
     private int minIndex;
     private int loopSong=0;
+    int click=0;
 
     public int getLoopSong() {
         return loopSong;
@@ -82,10 +83,11 @@ public class MyService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("it", "onStartCommand: "+intent.getAction());
+        Log.e("it", "onStartCommand: "+intent.getAction());
         if(isMusicPlay()){
             switch (intent.getAction()){
                 case ACTION_PERVIOUS:
+
                     try {
                         previousSong();
                         break;
@@ -144,6 +146,7 @@ public class MyService extends Service {
         return false;
     }
     public void pauseSong(){
+        click=0;
         mediaPlayer.stop();
        // showNotification(nameSong,nameArtist,potoMusic);
     }
@@ -164,7 +167,8 @@ public class MyService extends Service {
         Intent notificationIntent=new Intent(this, MainActivity.class);
         PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,notificationIntent,0);
 
-        Intent previousIntent = new Intent(ACTION_PERVIOUS);
+        Intent previousIntent = new Intent(this, MyService.class);
+        previousIntent.setAction(ACTION_PERVIOUS);
         PendingIntent previousPendingIntent = null;
 
         Intent playIntent = new Intent(ACTION_PLAY);
@@ -175,8 +179,8 @@ public class MyService extends Service {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             previousPendingIntent = PendingIntent.getForegroundService(this, 0, previousIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            playPendingIntent = PendingIntent.getService(getApplicationContext(), 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            nextPendingIntent = PendingIntent.getService(getApplicationContext(), 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            playPendingIntent = PendingIntent.getForegroundService(getApplicationContext(), 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            nextPendingIntent = PendingIntent.getForegroundService(getApplicationContext(), 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         RemoteViews mSmallNotification=new RemoteViews(getPackageName(),R.layout.small_noyification);
@@ -193,7 +197,7 @@ public class MyService extends Service {
         mNotification.setOnClickPendingIntent(R.id.previous_ntf,previousPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.next_ntf,nextPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.play_ntf,playPendingIntent);
-        mNotification.setImageViewResource(R.id.play_ntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+       // mNotification.setImageViewResource(R.id.play_ntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
             mNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
         }else{
@@ -202,7 +206,7 @@ public class MyService extends Service {
         mSmallNotification.setOnClickPendingIntent(R.id.play_smallntf,playPendingIntent);
         mSmallNotification.setOnClickPendingIntent(R.id.previous_smallntf,previousPendingIntent);
         mSmallNotification.setOnClickPendingIntent(R.id.next_smallntf,nextPendingIntent);
-        mSmallNotification.setImageViewResource(R.id.play_smallntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+       // mSmallNotification.setImageViewResource(R.id.play_smallntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
             mSmallNotification.setImageViewBitmap(R.id.image,getAlbumn(path));
         }else{

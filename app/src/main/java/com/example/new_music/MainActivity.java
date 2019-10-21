@@ -1,6 +1,9 @@
 package com.example.new_music;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
@@ -28,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     MyService myService;
     boolean mBound=false;
     Fragment fragmentlistBaihat;
-
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
