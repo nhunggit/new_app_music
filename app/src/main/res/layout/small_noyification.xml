@@ -12,23 +12,22 @@
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
         android:src="@drawable/ic_previous_black_24dp"
-        android:layout_margin="35dp"
-        android:id="@+id/previous"/>
+        android:layout_margin="20dp"
+        android:id="@+id/previous_smallntf"/>
+
+    <ImageView
+        android:id="@+id/play_smallntf"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_pause" />
+
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
-        android:src="@drawable/ic_pause"
-        android:layout_margin="35dp"
-        android:id="@+id/pause"/>
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
         android:src="@drawable/ic_skip_next_black_24dp"
-        android:layout_margin="35dp"
-        android:id="@+id/next"/>
+        android:layout_margin="20dp"
+        android:id="@+id/next_smallntf"/>
 
 </LinearLayout>

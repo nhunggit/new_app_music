@@ -80,6 +80,41 @@ public class MyService extends Service {
             return MyService.this;
         }
     }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("it", "onStartCommand: "+intent.getAction());
+        if(isMusicPlay()){
+            switch (intent.getAction()){
+                case ACTION_PERVIOUS:
+                    try {
+                        previousSong();
+                        break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                case ACTION_NEXT:
+                    try {
+                        nextSong();
+                        break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                case ACTION_PLAY:
+                    if(mediaPlayer.isPlaying())
+                        pauseSong();
+                    else {
+                        try {
+                            playSong(getListsong().get(getMinIndex()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     public Bitmap getAlbumn(String path){
         MediaMetadataRetriever metadataRetriever=new MediaMetadataRetriever();
         metadataRetriever.setDataSource(path);
@@ -125,8 +160,24 @@ public class MyService extends Service {
 
     public void showNotification(String nameSong, String nameArtist, String path){
         createNotificationChanel();
+
         Intent notificationIntent=new Intent(this, MainActivity.class);
         PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,notificationIntent,0);
+
+        Intent previousIntent = new Intent(ACTION_PERVIOUS);
+        PendingIntent previousPendingIntent = null;
+
+        Intent playIntent = new Intent(ACTION_PLAY);
+        PendingIntent playPendingIntent = null;
+
+        Intent nextIntent = new Intent(ACTION_NEXT);
+        PendingIntent nextPendingIntent = null;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            previousPendingIntent = PendingIntent.getForegroundService(this, 0, previousIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            playPendingIntent = PendingIntent.getService(getApplicationContext(), 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            nextPendingIntent = PendingIntent.getService(getApplicationContext(), 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         RemoteViews mSmallNotification=new RemoteViews(getPackageName(),R.layout.small_noyification);
         RemoteViews mNotification=new RemoteViews(getPackageName(),R.layout.notification);
@@ -137,20 +188,25 @@ public class MyService extends Service {
         builder.setCustomContentView(mSmallNotification);
         builder.setCustomBigContentView(mNotification);
         builder.setContentIntent(pendingIntent);
-        mNotification.setTextViewText(R.id.title,nameSong);
-        mNotification.setTextViewText(R.id.artist,nameArtist);
-        //mNotification.setImageViewResource(R.id.play, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        mNotification.setTextViewText(R.id.title_ntf,nameSong);
+        mNotification.setTextViewText(R.id.artist_ntf,nameArtist);
+        mNotification.setOnClickPendingIntent(R.id.previous_ntf,previousPendingIntent);
+        mNotification.setOnClickPendingIntent(R.id.next_ntf,nextPendingIntent);
+        mNotification.setOnClickPendingIntent(R.id.play_ntf,playPendingIntent);
+        mNotification.setImageViewResource(R.id.play_ntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
             mNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
         }else{
             mNotification.setImageViewResource(R.id.img,R.drawable.default_cover_art);
         }
-
-       // mSmallNotification.setImageViewResource(R.id.play, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        mSmallNotification.setOnClickPendingIntent(R.id.play_smallntf,playPendingIntent);
+        mSmallNotification.setOnClickPendingIntent(R.id.previous_smallntf,previousPendingIntent);
+        mSmallNotification.setOnClickPendingIntent(R.id.next_smallntf,nextPendingIntent);
+        mSmallNotification.setImageViewResource(R.id.play_smallntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
-            mSmallNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
+            mSmallNotification.setImageViewBitmap(R.id.image,getAlbumn(path));
         }else{
-            mSmallNotification.setImageViewResource(R.id.img,R.drawable.default_cover_art);
+            mSmallNotification.setImageViewResource(R.id.image,R.drawable.default_cover_art);
         }
         startForeground(1, builder.build());
     }
@@ -158,7 +214,7 @@ public class MyService extends Service {
     public void createNotificationChanel(){
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel=new NotificationChannel(
-                    NotificationChannel.DEFAULT_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_ID,
                     "mUSIC SERVICE CHANNEL",
                     NotificationManager.IMPORTANCE_HIGH
             );
