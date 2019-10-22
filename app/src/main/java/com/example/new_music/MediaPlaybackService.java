@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MyService extends Service {
+public class MediaPlaybackService extends Service {
     private static final String NOTIFICATION_CHANNEL_ID="1";
     public static final String ACTION_PERVIOUS = "xxx.yyy.zzz.ACTION_PERVIOUS";
     public static final String ACTION_PLAY = "xxx.yyy.zzz.ACTION_PLAY";
@@ -36,34 +36,34 @@ public class MyService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private final Random mRandom = new Random();
     private MediaPlayer mediaPlayer;
-    private String nameSong="";
-    private String nameArtist="";
-    private String potoMusic="";
-    private String file="";
-    private boolean shuffleSong=false;
-    private int minIndex;
-    private int loopSong=0;
+    private String mNameSong ="";
+    private String mArtistt ="";
+    private String mPotoMusic ="";
+    private String mFile ="";
+    private boolean mShuffleSong =false;
+    private int mMinIndex;
+    private int mLoopSong =0;
 
     public int getLoopSong() {
-        return loopSong;
+        return mLoopSong;
     }
     public void setLoopSong(int loopSong) {
-        this.loopSong = loopSong;
+        this.mLoopSong = loopSong;
     }
     public String getFile() {
-        return file;
+        return mFile;
     }
     public int getMinIndex() {
-        return minIndex;
+        return mMinIndex;
     }
     public String getNameArtist(){
-        return nameArtist;
+        return mArtistt;
     }
     public String getPotoMusic(){
-        return potoMusic;
+        return mPotoMusic;
     }
     public String getNameSong(){
-        return nameSong;
+        return mNameSong;
     }
     private ArrayList<Song> listsong = new ArrayList<>();
     public MediaPlayer getMediaPlayer() {
@@ -76,8 +76,8 @@ public class MyService extends Service {
         return listsong;
     }
     public class LocalBinder extends Binder {
-        MyService getService() {
-            return MyService.this;
+        MediaPlaybackService getService() {
+            return MediaPlaybackService.this;
         }
     }
     @Override
@@ -86,7 +86,6 @@ public class MyService extends Service {
         if(isMusicPlay()){
             switch (intent.getAction()){
                 case ACTION_PERVIOUS:
-
                     try {
                         previousSong();
                         break;
@@ -128,10 +127,10 @@ public class MyService extends Service {
         return result;
     }
     public boolean isShuffleSong(){
-        return shuffleSong;
+        return mShuffleSong;
     }
     public void setShuffleSong(boolean shuffleSong){
-        this.shuffleSong=shuffleSong;
+        this.mShuffleSong =shuffleSong;
     }
     public boolean isMusicPlay() {
         if (mediaPlayer != null) {
@@ -147,7 +146,7 @@ public class MyService extends Service {
 
     public void pauseSong(){
         mediaPlayer.stop();
-       // showNotification(nameSong,nameArtist,potoMusic);
+        showNotification(mNameSong, mArtistt, mPotoMusic);
     }
     public int getDurationSong(){
         return mediaPlayer.getDuration();
@@ -166,15 +165,15 @@ public class MyService extends Service {
         Intent notificationIntent=new Intent(this, MainActivity.class);
         PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,notificationIntent,0);
 
-        Intent previousIntent = new Intent(this, MyService.class);
+        Intent previousIntent = new Intent(this, MediaPlaybackService.class);
         previousIntent.setAction(ACTION_PERVIOUS);
         PendingIntent previousPendingIntent = null;
 
-        Intent playIntent = new Intent(this,MyService.class);
+        Intent playIntent = new Intent(this, MediaPlaybackService.class);
         playIntent.setAction(ACTION_PLAY);
         PendingIntent playPendingIntent = null;
 
-        Intent nextIntent = new Intent(this,MyService.class);
+        Intent nextIntent = new Intent(this, MediaPlaybackService.class);
         nextIntent.setAction(ACTION_NEXT);
         PendingIntent nextPendingIntent = null;
 
@@ -193,13 +192,13 @@ public class MyService extends Service {
         builder.setCustomContentView(mSmallNotification);
         builder.setCustomBigContentView(mNotification);
         builder.setContentIntent(pendingIntent);
+
         mNotification.setTextViewText(R.id.title_ntf,nameSong);
         mNotification.setTextViewText(R.id.artist_ntf,nameArtist);
         mNotification.setOnClickPendingIntent(R.id.previous_ntf,previousPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.next_ntf,nextPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.play_ntf,playPendingIntent);
-        mNotification.setImageViewResource(R.id.play_ntf,!isPlaying()? R.drawable.ic_play_circle_filled_black_50dp :R.drawable.ic_pause_circle_filled_black_50dp );
-        mNotification.setImageViewResource(R.id.play_ntf,isPlaying()?  R.drawable.ic_pause_circle_filled_black_50dp :R.drawable.ic_play_circle_filled_black_50dp);
+        mNotification.setImageViewResource(R.id.play_ntf,isPlaying()? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
             mNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
         }else{
@@ -232,7 +231,7 @@ public class MyService extends Service {
 
     public void playSong(Song song) throws IOException {
         mediaPlayer = new MediaPlayer();
-        if (mediaPlayer.isPlaying()) {
+        if (isPlaying()) {
             mediaPlayer.pause();
         } else {
             Uri uri = Uri.parse(song.getFile());
@@ -241,42 +240,41 @@ public class MyService extends Service {
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.start();
-            nameSong=song.getTitle();
-            nameArtist=song.getArtist();
-            potoMusic=song.getFile();
-            file=song.getFile();
-            minIndex=song.getId()-1;
-            showNotification(nameSong,nameArtist,potoMusic);
-
+            mNameSong =song.getTitle();
+            mArtistt =song.getArtist();
+            mPotoMusic =song.getFile();
+            mFile =song.getFile();
+            mMinIndex =song.getId()-1;
         }
+        showNotification(mNameSong, mArtistt, mPotoMusic);
     }
 
     public void nextSong() throws IOException {
         mediaPlayer.stop();
-        if(shuffleSong==true){
-            minIndex=actionShuffleSong();
+        if(mShuffleSong ==true){
+            mMinIndex =actionShuffleSong();
         }
         else{
-            minIndex++;
-            if(minIndex==listsong.size())
-                minIndex=0;
+            mMinIndex++;
+            if(mMinIndex ==listsong.size())
+                mMinIndex =0;
         }
-        Log.d("ab", "nextSong: "+minIndex);
-        playSong(listsong.get(minIndex));
+        Log.d("ab", "nextSong: "+ mMinIndex);
+        playSong(listsong.get(mMinIndex));
 
     }
     public void previousSong() throws IOException {
         mediaPlayer.stop();
-        if(shuffleSong==true){
-            minIndex=actionShuffleSong();
+        if(mShuffleSong ==true){
+            mMinIndex =actionShuffleSong();
         }
         else{
-            minIndex--;
-            if(minIndex==0)
-                minIndex=listsong.size()-1;
+            mMinIndex--;
+            if(mMinIndex ==0)
+                mMinIndex =listsong.size()-1;
         }
-        Log.d("ab", "nextSong: "+minIndex);
-        playSong(listsong.get(minIndex));
+        Log.d("ab", "nextSong: "+ mMinIndex);
+        playSong(listsong.get(mMinIndex));
 
     }
 
@@ -302,20 +300,20 @@ public class MyService extends Service {
     }
     public void onCompletionSong() throws IOException {
         mediaPlayer.pause();
-        if(loopSong==0){
-            if(minIndex<listsong.size()-1){
-                minIndex++;
+        if(mLoopSong ==0){
+            if(mMinIndex <listsong.size()-1){
+                mMinIndex++;
             }
         }else{
-            if(loopSong==-1){
-                if(minIndex==listsong.size()-1){
-                    minIndex=0;
+            if(mLoopSong ==-1){
+                if(mMinIndex ==listsong.size()-1){
+                    mMinIndex =0;
                 }else{
-                    minIndex++;
+                    mMinIndex++;
                 }
             }
         }
-        playSong(listsong.get(minIndex));
+        playSong(listsong.get(mMinIndex));
     }
 
 

@@ -1,8 +1,6 @@
 package com.example.new_music;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder> {
-
     ArrayList<Song> mSong;
     Context mcontext;
     OnClickItemView onClickItemView;
-    MyService myService;
-    String duration = "";
-    int position;
+    MediaPlaybackService myService;
     int k=0;
 
-    public void setMyService(MyService myService) {
+    public void setMyService(MediaPlaybackService myService) {
         this.myService = myService;
     }
 
@@ -69,9 +63,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
                 onClickItemView.ClickItem(position);
             }
         });
-//        if(myService!=null){
-//            Log.d("test", "onBindViewHolder: "+"ok");
-//        }
     }
 
     public void setOnClickItemView(OnClickItemView onClickItemView) {

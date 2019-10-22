@@ -1,43 +1,32 @@
 package com.example.new_music;
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.app.ActivityManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    MyService myService;
+    MediaPlaybackService myService;
     boolean mBound=false;
     Fragment fragmentlistBaihat;
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            MyService.LocalBinder binder=(MyService.LocalBinder) service;
+            MediaPlaybackService.LocalBinder binder=(MediaPlaybackService.LocalBinder) service;
             myService=binder.getService();
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
-            ((listSongFragmennt)fragmentlistBaihat).setMyService(myService);
+            ((AllSongsFragment)fragmentlistBaihat).setMyService(myService);
             mBound=true;
         }
 
@@ -53,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent=new Intent(this,MyService.class);
+        Intent intent=new Intent(this, MediaPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        fragmentlistBaihat = new listSongFragmennt();
+        fragmentlistBaihat = new AllSongsFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, fragmentlistBaihat).commit();
 
     }

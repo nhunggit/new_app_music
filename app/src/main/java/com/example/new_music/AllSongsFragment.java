@@ -1,20 +1,8 @@
 package com.example.new_music;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -37,12 +23,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class listSongFragmennt extends Fragment implements SongAdapter.OnClickItemView, LoaderManager.LoaderCallbacks<Cursor> {
-    MyService myService;
+public class AllSongsFragment extends Fragment implements SongAdapter.OnClickItemView, LoaderManager.LoaderCallbacks<Cursor> {
+    MediaPlaybackService myService;
     ConstraintLayout constraintLayout;
     ConstraintLayout mConstraitLayout;
     TextView NameSongPlaying;
@@ -50,10 +34,10 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     TextView artist;
     ImageButton buttonPlay;
     ImageView disk;
-    SongAdapter baihatAdapter;
+    SongAdapter songAdapter;
     RecyclerView recycleview;
     private int position=0;
-    private songFragment songFragment=new songFragment();
+    private MediaPlaybackFragment songFragment=new MediaPlaybackFragment();
     ArrayList<Song> songs = new ArrayList<>();
     public ArrayList<Song> getListsong() {
         return songs;
@@ -137,7 +121,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
     @Override
     public void ClickItem(int position) {
 
-        baihatAdapter.setK(0);
+        songAdapter.setK(0);
         try {
             myService.setListSong(songs);
         if (myService.isMusicPlay()) {
@@ -158,7 +142,7 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
 
     }
 
-    public void setMyService(MyService service){
+    public void setMyService(MediaPlaybackService service){
         this.myService = service;
     }
 
@@ -201,9 +185,9 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
                 songs.add(new Song(id,title,file,artist,duration));
             }
             Log.d("size", "ClickItem: "+songs.size());
-            baihatAdapter = new SongAdapter(songs, getContext());
-            recycleview.setAdapter(baihatAdapter);
-            baihatAdapter.setOnClickItemView(this);
+            songAdapter = new SongAdapter(songs, getContext());
+            recycleview.setAdapter(songAdapter);
+            songAdapter.setOnClickItemView(this);
         }
     }
 

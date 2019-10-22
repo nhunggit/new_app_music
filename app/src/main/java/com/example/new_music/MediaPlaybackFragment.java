@@ -3,18 +3,15 @@ package com.example.new_music;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
-import android.icu.text.Transliterator;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,10 +22,9 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class songFragment extends Fragment {
-    MyService myService;
+public class MediaPlaybackFragment extends Fragment {
+    MediaPlaybackService myService;
     TextView nameSong;
     TextView nameArtist;
     ImageView potoMusic;
@@ -214,7 +210,7 @@ public class songFragment extends Fragment {
         }, 100);
     }
 
-    public void setMyService(MyService service) {
+    public void setMyService(MediaPlaybackService service) {
         this.myService = service;
     }
 }

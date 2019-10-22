@@ -1,46 +1,46 @@
 package com.example.new_music;
 
 public class Song {
-    private int id;
+    private int mID;
 
-    private  String title;
+    private  String mTitle;
 
-    private  String file;
+    private  String mFile;
 
-    private String artist;
+    private String mAtist;
 
-    private int duration;
+    private int mDuration;
 
 
     public int getId() {
-        return id;
+        return mID;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
 
     public String getFile() {
-        return file;
+        return mFile;
     }
 
     public String getArtist() {
-        return artist;
+        return mAtist;
     }
 
     public int getDuration() {
-        return duration;
+        return mDuration;
     }
 
 
 
     public Song(int id, String title, String file , String artist, int duration) {
-        this.title=title;
-        this.id=id;
-       this.file=file;
-        this.artist = artist;
-        this.duration= duration;
+        this.mTitle =title;
+        this.mID =id;
+       this.mFile =file;
+        this.mAtist = artist;
+        this.mDuration = duration;
     }
 
     public Song(){
@@ -48,22 +48,22 @@ public class Song {
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.mID = id;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.mTitle = title;
     }
 
     public void setFile(String file) {
-        this.file = file;
+        this.mFile = file;
     }
 
     public void setArtist(String artist) {
-        this.artist = artist;
+        this.mAtist = artist;
     }
 
     public void setDuration(int duration) {
-        this.duration = duration;
+        this.mDuration = duration;
     }
 }
