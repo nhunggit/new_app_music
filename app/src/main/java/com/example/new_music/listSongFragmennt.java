@@ -101,12 +101,16 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
         if(myService!=null){
             updateUI();
         }
+
         return view;
     }
 
-
-
 //    @Override
+//    public void onResume() {
+//        super.onResume();
+//        baihatAdapter.setMyService(myService);
+//    }
+    //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
@@ -119,13 +123,14 @@ public class listSongFragmennt extends Fragment implements SongAdapter.OnClickIt
             Log.d("abc1", "ClickItem: "+myService.getNameSong());
             //constraintLayout.setVisibility(View.VISIBLE);
             myService.updateTime();
+            disk.setImageBitmap(myService.getAlbumn(myService.getFile()));
+            NameSongPlaying.setText(myService.getNameSong());
+            artist.setText(myService.getNameArtist());
             if(myService.isPlaying()){
                 buttonPlay.setImageResource(R.drawable.ic_pause);
             }else
                 buttonPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-            disk.setImageBitmap(myService.getAlbumn(myService.getFile()));
-            NameSongPlaying.setText(myService.getNameSong());
-            artist.setText(myService.getNameArtist());
+
         }
     }
 

@@ -43,7 +43,6 @@ public class MyService extends Service {
     private boolean shuffleSong=false;
     private int minIndex;
     private int loopSong=0;
-    int click=0;
 
     public int getLoopSong() {
         return loopSong;
@@ -145,8 +144,8 @@ public class MyService extends Service {
             return true;
         return false;
     }
+
     public void pauseSong(){
-        click=0;
         mediaPlayer.stop();
        // showNotification(nameSong,nameArtist,potoMusic);
     }
@@ -171,10 +170,12 @@ public class MyService extends Service {
         previousIntent.setAction(ACTION_PERVIOUS);
         PendingIntent previousPendingIntent = null;
 
-        Intent playIntent = new Intent(ACTION_PLAY);
+        Intent playIntent = new Intent(this,MyService.class);
+        playIntent.setAction(ACTION_PLAY);
         PendingIntent playPendingIntent = null;
 
-        Intent nextIntent = new Intent(ACTION_NEXT);
+        Intent nextIntent = new Intent(this,MyService.class);
+        nextIntent.setAction(ACTION_NEXT);
         PendingIntent nextPendingIntent = null;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -197,7 +198,8 @@ public class MyService extends Service {
         mNotification.setOnClickPendingIntent(R.id.previous_ntf,previousPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.next_ntf,nextPendingIntent);
         mNotification.setOnClickPendingIntent(R.id.play_ntf,playPendingIntent);
-       // mNotification.setImageViewResource(R.id.play_ntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        mNotification.setImageViewResource(R.id.play_ntf,!isPlaying()? R.drawable.ic_play_circle_filled_black_50dp :R.drawable.ic_pause_circle_filled_black_50dp );
+        mNotification.setImageViewResource(R.id.play_ntf,isPlaying()?  R.drawable.ic_pause_circle_filled_black_50dp :R.drawable.ic_play_circle_filled_black_50dp);
         if(getAlbumn(path)!=null){
             mNotification.setImageViewBitmap(R.id.img,getAlbumn(path));
         }else{
@@ -206,7 +208,7 @@ public class MyService extends Service {
         mSmallNotification.setOnClickPendingIntent(R.id.play_smallntf,playPendingIntent);
         mSmallNotification.setOnClickPendingIntent(R.id.previous_smallntf,previousPendingIntent);
         mSmallNotification.setOnClickPendingIntent(R.id.next_smallntf,nextPendingIntent);
-       // mSmallNotification.setImageViewResource(R.id.play_smallntf, isMusicPlay() ? isPlaying() ? R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp);
+        mSmallNotification.setImageViewResource(R.id.play_smallntf, isPlaying() ?  R.drawable.ic_pause_circle_filled_black_50dp : R.drawable.ic_play_circle_filled_black_50dp );
         if(getAlbumn(path)!=null){
             mSmallNotification.setImageViewBitmap(R.id.image,getAlbumn(path));
         }else{
@@ -288,6 +290,7 @@ public class MyService extends Service {
                     public void onCompletion(MediaPlayer mp) {
                         try {
                             onCompletionSong();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

@@ -27,6 +27,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
     int position;
     int k=0;
 
+    public void setMyService(MyService myService) {
+        this.myService = myService;
+    }
 
     public void setK(int k) {
         this.k = k;
@@ -66,6 +69,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
                 onClickItemView.ClickItem(position);
             }
         });
+//        if(myService!=null){
+//            Log.d("test", "onBindViewHolder: "+"ok");
+//        }
     }
 
     public void setOnClickItemView(OnClickItemView onClickItemView) {
