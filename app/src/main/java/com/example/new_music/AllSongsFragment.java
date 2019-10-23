@@ -118,7 +118,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         if(myService.isMusicPlay()){
             Log.d("abc1", "ClickItem: "+myService.getNameSong());
             //constraintLayout.setVisibility(View.VISIBLE);
-            myService.updateTime();
+            myService.getMediaPlayer().setOnCompletionListener(myService);
             disk.setImageBitmap(myService.getAlbumn(myService.getFile()));
             NameSongPlaying.setText(myService.getNameSong());
             artist.setText(myService.getNameArtist());

@@ -1,4 +1,5 @@
 package com.example.new_music;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -27,8 +28,9 @@ public class MainActivity extends AppCompatActivity  {
             MediaPlaybackService.LocalBinder binder=(MediaPlaybackService.LocalBinder) service;
             myService=binder.getService();
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
-
             ((AllSongsFragment) mAllSongFragment).setMyService(myService);
+            ((MediaPlaybackFragment)mMediaPlayBackFragment).setMyService(myService);
+
             mBound=true;
         }
         @Override
@@ -43,17 +45,16 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent=new Intent(this, MediaPlaybackService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         boolean ispotraist=getResources().getBoolean(R.bool.isPortrait);
        //boolean n=getResources().getBoolean(R.bool.nhung);
         mAllSongFragment = new AllSongsFragment();
         mMediaPlayBackFragment = new MediaPlaybackFragment();
+        Intent intent=new Intent(this, MediaPlaybackService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         if(ispotraist==false) {
             if(findViewById(R.id.fragment2)!=null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, mMediaPlayBackFragment).commit();
-
             }
             else
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
@@ -72,4 +73,5 @@ public class MainActivity extends AppCompatActivity  {
         return super.onCreateOptionsMenu(menu);
 
     }
+    
 }

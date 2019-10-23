@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MediaPlaybackService extends Service {
+public class MediaPlaybackService extends Service implements  MediaPlayer.OnCompletionListener{
     private static final String NOTIFICATION_CHANNEL_ID="1";
     public static final String ACTION_PERVIOUS = "xxx.yyy.zzz.ACTION_PERVIOUS";
     public static final String ACTION_PLAY = "xxx.yyy.zzz.ACTION_PLAY";
@@ -75,6 +75,17 @@ public class MediaPlaybackService extends Service {
     public ArrayList<Song> getListsong() {
         return listsong;
     }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        try {
+            onCompletionSong();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public class LocalBinder extends Binder {
         MediaPlaybackService getService() {
             return MediaPlaybackService.this;
@@ -231,6 +242,7 @@ public class MediaPlaybackService extends Service {
 
     public void playSong(Song song) throws IOException {
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(this);
         if (isPlaying()) {
             mediaPlayer.pause();
         } else {
@@ -278,26 +290,26 @@ public class MediaPlaybackService extends Service {
 
     }
 
-    public void updateTime(){
-        final Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        try {
-                            onCompletionSong();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                handler.postDelayed(this,500);
-            }
-        },100);
-    }
+//    public void updateTime(){
+//        final Handler handler=new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                    @Override
+//                    public void onCompletion(MediaPlayer mp) {
+//                        try {
+//                            onCompletionSong();
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//                handler.postDelayed(this,500);
+//            }
+//        },100);
+//    }
     public void onCompletionSong() throws IOException {
         mediaPlayer.pause();
         if(mLoopSong ==0){
