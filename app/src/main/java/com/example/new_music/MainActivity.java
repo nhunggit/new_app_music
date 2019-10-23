@@ -15,23 +15,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     MediaPlaybackService myService;
     boolean mBound=false;
     Fragment mAllSongFragment;
     Fragment mMediaPlayBackFragment;
-    private  boolean mStatus=false;
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MediaPlaybackService.LocalBinder binder=(MediaPlaybackService.LocalBinder) service;
             myService=binder.getService();
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
+
             ((AllSongsFragment) mAllSongFragment).setMyService(myService);
             mBound=true;
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mBound=false;
@@ -47,13 +46,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent=new Intent(this, MediaPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         boolean ispotraist=getResources().getBoolean(R.bool.isPortrait);
+       //boolean n=getResources().getBoolean(R.bool.nhung);
         mAllSongFragment = new AllSongsFragment();
         mMediaPlayBackFragment = new MediaPlaybackFragment();
-       // Log.d("land", "onCreate: "+ispotraist);
         if(ispotraist==false) {
             if(findViewById(R.id.fragment2)!=null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, mMediaPlayBackFragment).commit();
+
             }
             else
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
@@ -72,59 +72,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
     }
-
-
-
 }
-
-//        //contentProvider contentProvider=new contentProvider();
-//        //contentProvider.onCreate();
-////        Fragment fragmentbaihat=new fragmentBaihat();
-////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentbaihat,fragmentbaihat).commit();
-////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlistbaihat, fragmentlistBaihat).commit();
-//    }
-////
-////    public void onClickbh(View view) {
-////        Fragment fragmentBaihat=new fragmentBaihat();
-////        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragmentBaihat).commit();
-////    }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.tuychon_menu,menu);
-//        MenuItem search=menu.findItem(R.id.timkiem);
-//        SearchView searchView= (SearchView) search.getActionView();
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(@NonNull MenuItem item) {
-//        return super.onContextItemSelected(item);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    public void tenbaihat(View view) {
-//        Fragment fragment=new fragmentBaihat();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlist,fragment).commit();
-
- //   }
-//    public void provider(){
-//        ContentResolver contentResolver=getContentResolver();
-//        Cursor cusor=contentResolver.query(nhacUri,null,null,null,null);
-//        cusor.moveToFirst();
-//        int i=0;
-//        while(!cusor.isAfterLast()){
-//            String duongdanAudio=cusor.getString(cusor.getColumnIndex(MediaStore.Audio.Media.DATA));
-//            //int bia=Integer.parseInt(duongdanAudio);
-//            String ten=cusor.getString(cusor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-//            //baiHat baiHat=new baiHat(i,ten,bia);
-//            Log.d("giatri",ten+"___"+i+"__"+duongdanAudio);
-//            cusor.moveToNext();
-//            i++;
-//        }
-//    }
-//}

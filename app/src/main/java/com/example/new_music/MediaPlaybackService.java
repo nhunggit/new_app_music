@@ -38,7 +38,7 @@ public class MediaPlaybackService extends Service {
     private MediaPlayer mediaPlayer;
     private String mNameSong ="";
     private String mArtistt ="";
-    private String mPotoMusic ="";
+    private String  mPotoMusic ="";
     private String mFile ="";
     private boolean mShuffleSong =false;
     private int mMinIndex;

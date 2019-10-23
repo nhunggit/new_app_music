@@ -58,9 +58,9 @@ public class MediaPlaybackFragment extends Fragment {
         repeat = (ImageView) view.findViewById(R.id.repeat);
         shuffle = (ImageView) view.findViewById(R.id.shuffle);
         previous = (ImageView) view.findViewById(R.id.previous);
-//        if (myService.isPlaying()) {
-//            updateUI();
-//        }
+        if(myService.isPlaying()) {
+            updateUI();
+        }
         if (myService != null) {
             seekBar.setMax(myService.getDurationSong());
         }
@@ -154,7 +154,7 @@ public class MediaPlaybackFragment extends Fragment {
                 updateUI();
             }
         });
-        updateUI();
+
         return view;
     }
 

@@ -43,6 +43,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         return songs;
     }
     private static final int LOADER_ID = 1;
+    boolean ispotraist;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,20 +57,28 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         disk=view.findViewById(R.id.disk);
         nameSong=view.findViewById(R.id.namesong);
         recycleview.setHasFixedSize(true);
+        ispotraist=getResources().getBoolean(R.bool.isPortrait);
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
         LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
-        boolean ispotraist=getResources().getBoolean(R.bool.isPortrait);
-        mConstraitLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                songFragment.setMyService(myService);
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment1,songFragment).commit();
+            if(ispotraist==true){
+            mConstraitLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    songFragment.setMyService(myService);
+                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment1,songFragment).commit();
+                }
+            });}else{
+                mConstraitLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        songFragment.setMyService(myService);
+                        getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
+                    }
+                });
             }
-        });
-//        if(ispotraist==false){
-//            isLand();
-//        }
+
+//
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,27 +129,16 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
 
         }
     }
-//    public void isLand(){
-//        mConstraitLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                songFragment.setMyService(myService);
-//                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
-//            }
-//        });
-//        constraintLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                songFragment.setMyService(myService);
-//                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
-//                updateUI();
-//            }
-//        });
-//
-//    }
 
     @Override
     public void ClickItem(int position) {
+        //iListennerSong.dataSong(songs.get(position));
+       if(ispotraist==true) {
+            mConstraitLayout.setVisibility(View.VISIBLE);
+      }else{
+            songFragment.setMyService(myService);
+            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
+        }
 
         songAdapter.setK(0);
         try {
@@ -156,7 +154,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         else {
             myService.playSong(songs.get(position));
         }
-            updateUI();
+        updateUI();
         } catch (IOException e) {
         e.printStackTrace();
     }
