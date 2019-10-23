@@ -19,14 +19,16 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlaybackService myService;
     boolean mBound=false;
-    Fragment fragmentlistBaihat;
+    Fragment mAllSongFragment;
+    Fragment mMediaPlayBackFragment;
+    private  boolean mStatus=false;
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MediaPlaybackService.LocalBinder binder=(MediaPlaybackService.LocalBinder) service;
             myService=binder.getService();
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
-            ((AllSongsFragment)fragmentlistBaihat).setMyService(myService);
+            ((AllSongsFragment) mAllSongFragment).setMyService(myService);
             mBound=true;
         }
 
@@ -44,8 +46,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent=new Intent(this, MediaPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        fragmentlistBaihat = new AllSongsFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, fragmentlistBaihat).commit();
+        boolean ispotraist=getResources().getBoolean(R.bool.isPortrait);
+        mAllSongFragment = new AllSongsFragment();
+        mMediaPlayBackFragment = new MediaPlaybackFragment();
+       // Log.d("land", "onCreate: "+ispotraist);
+        if(ispotraist==false) {
+            if(findViewById(R.id.fragment2)!=null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment2, mMediaPlayBackFragment).commit();
+            }
+            else
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
+
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment1, mAllSongFragment).commit();
+        }
 
     }
 

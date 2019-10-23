@@ -5,17 +5,15 @@
     android:layout_height="match_parent"
     android:layout_weight="10"
     tools:ignore="MissingDefaultResource">
-    <fragment
+    <FrameLayout
         android:id="@+id/fragment1"
-        android:name="com.example.new_music.AllSongsFragment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4" />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/fragment2"
-        android:name="com.example.new_music.MediaPlaybackFragment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="6" />
 </LinearLayout>

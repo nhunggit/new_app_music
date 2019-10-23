@@ -59,7 +59,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
         LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
-
+        boolean ispotraist=getResources().getBoolean(R.bool.isPortrait);
         mConstraitLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +67,9 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
                 getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment1,songFragment).commit();
             }
         });
+//        if(ispotraist==false){
+//            isLand();
+//        }
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +120,24 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
 
         }
     }
+//    public void isLand(){
+//        mConstraitLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                songFragment.setMyService(myService);
+//                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
+//            }
+//        });
+//        constraintLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                songFragment.setMyService(myService);
+//                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment2,songFragment).commit();
+//                updateUI();
+//            }
+//        });
+//
+//    }
 
     @Override
     public void ClickItem(int position) {
