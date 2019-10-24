@@ -48,6 +48,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        songAdapter = new SongAdapter(songs, getContext());
         View view = inflater.inflate(R.layout.list_baihat, container, false);
         View View=inflater.inflate(R.layout.item_baihat,container,false);
         recycleview = view.findViewById(R.id.recyclerview);
@@ -60,8 +61,10 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         nameSong=View.findViewById(R.id.namesong);
         recycleview.setHasFixedSize(true);
         ispotraist=getResources().getBoolean(R.bool.isPortrait);
+       // Log.d("nameSong", "onCreateView: "+nameSong.getText());
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recycleview.setLayoutManager(linearLayoutManager);
+
         LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
             if(ispotraist==true){
             mConstraitLayout.setOnClickListener(new View.OnClickListener() {
@@ -79,9 +82,6 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
                     }
                 });
             }
-
-
-//
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +98,9 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
             }
         });
         if(myService!=null){
+
             updateUI();
+            songAdapter.setMyService(myService);
         }
 
         return view;
@@ -130,12 +132,15 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
             }else
                 buttonPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp);
 
+           // if((myService.getNameSong()).equals(songs))
+
         }
     }
 
     @Override
     public void ClickItem(int position) {
         //iListennerSong.dataSong(songs.get(position));
+        int k=0;
        if(ispotraist==true) {
             mConstraitLayout.setVisibility(View.VISIBLE);
       }else{
@@ -158,13 +163,6 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
             myService.playSong(songs.get(position));
         }
             updateUI();
-        if(myService!=null){
-
-        if((myService.getNameSong()).equals(songs.get(position).getTitle())){
-            Log.d("ko", "ClickItem: "+nameSong.getText());
-            nameSong.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
-
-        }}
 
         } catch (IOException e) {
         e.printStackTrace();
@@ -215,9 +213,10 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
                 songs.add(new Song(id,title,file,artist,duration));
             }
             Log.d("size", "ClickItem: "+songs.size());
-            songAdapter = new SongAdapter(songs, getContext());
             recycleview.setAdapter(songAdapter);
-            songAdapter.setOnClickItemView(this);
+            songAdapter.setOnClickItemView(
+                    this);
+
         }
     }
 

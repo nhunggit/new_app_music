@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity  {
 
     MediaPlaybackService myService;
@@ -32,8 +34,9 @@ public class MainActivity extends AppCompatActivity  {
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
             ((AllSongsFragment) mAllSongFragment).setMyService(myService);
             ((MediaPlaybackFragment)mMediaPlayBackFragment).setMyService(myService);
+            songAdapter.setMyService(myService);
             //iConnectActivityAndBaseSong.connectActivityAndBaseSong();
-           // songAdapter.setMyService(myService);
+          //  ((SongAdapter)songAdapter).setMyService(myService);
             mBound=true;
         }
         @Override
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity  {
        //boolean n=getResources().getBoolean(R.bool.nhung);
         mAllSongFragment = new AllSongsFragment();
         mMediaPlayBackFragment = new MediaPlaybackFragment();
+        songAdapter=new SongAdapter();
         Intent intent=new Intent(this, MediaPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         if(ispotraist==false) {
@@ -76,11 +80,12 @@ public class MainActivity extends AppCompatActivity  {
         return super.onCreateOptionsMenu(menu);
 
     }
+
 //    public void setiConnectActivityAndBaseSong(IConnectActivityAndBaseSong iConnectActivityAndBaseSong) {
 //        this.iConnectActivityAndBaseSong = iConnectActivityAndBaseSong;
 //    }
 //    interface IConnectActivityAndBaseSong {
 //        void connectActivityAndBaseSong();
 //    }
-    
+
 }

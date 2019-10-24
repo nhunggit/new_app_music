@@ -22,6 +22,26 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
     OnClickItemView onClickItemView;
     MediaPlaybackService myService;
     int k=0;
+    TextView nameSong;
+
+    public SongAdapter() {
+    }
+
+    public void setNameSong(TextView nameSong) {
+        this.nameSong = nameSong;
+    }
+
+    public Context getMcontext() {
+        return mcontext;
+    }
+
+    public void setMcontext(Context mcontext) {
+        this.mcontext = mcontext;
+    }
+
+    public TextView getNameSong() {
+        return nameSong;
+    }
 
     public void setMyService(MediaPlaybackService myService) {
         this.myService = myService;
@@ -66,17 +86,34 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
             }
         });
         if(myService!=null){
-            Log.d("service", "onBindViewHolder: "+"ok");
-            if((myService.getNameSong()).equals(mSong.get(position).getTitle())==true){
+            if(myService.getNameSong().equals(mSong.get(position).getTitle())){
                 holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
                 holder.mstt.setText("");
                 holder.mstt.setBackgroundResource(R.drawable.ic_equalizer_black_24dp);
+            }else{
+                holder.mstt.setText(mSong.get(position).getId() + "");
+                holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
             }
         }
-        else{
-            holder.mstt.setText(mSong.get(position).getId() + "");
-            holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
-        }
+
+
+
+
+       // Log.d("position", "onBindViewHolder: "+k);
+
+
+//        if(myService!=null){
+//            Log.d("service", "onBindViewHolder: "+"ok");
+//            if((myService.getNameSong()).equals(mSong.get(position).getTitle())==true){
+//                holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+//                holder.mstt.setText("");
+//                holder.mstt.setBackgroundResource(R.drawable.ic_equalizer_black_24dp);
+//            }
+//        }
+//        else{
+//            holder.mstt.setText(mSong.get(position).getId() + "");
+//            holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
+//        }
     }
 
     public void setOnClickItemView(OnClickItemView onClickItemView) {
@@ -95,6 +132,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
         TextView mHours;
         ImageButton mMore;
         ConstraintLayout constraintLayout;
+
         final SongAdapter mAdapter;
 
         public WordViewHolder(@NonNull View itemView, SongAdapter adapter) {
@@ -111,6 +149,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
 
     interface OnClickItemView {
         void ClickItem(int position);
+
     }
 }
 

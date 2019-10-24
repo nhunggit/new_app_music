@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MediaPlaybackFragment extends Fragment {
     MediaPlaybackService myService;
@@ -39,6 +40,8 @@ public class MediaPlaybackFragment extends Fragment {
     ImageView previous;
     ImageView repeat;
     ImageView shuffle;
+    ArrayList<Song> song=new ArrayList<>();
+    String name="ok";
 
     @Nullable
     @Override
@@ -58,6 +61,12 @@ public class MediaPlaybackFragment extends Fragment {
         repeat = (ImageView) view.findViewById(R.id.repeat);
         shuffle = (ImageView) view.findViewById(R.id.shuffle);
         previous = (ImageView) view.findViewById(R.id.previous);
+        if(savedInstanceState==null){
+
+        }else{
+            name=savedInstanceState.getString("namesong");
+            nameSong.setText(name);
+        }
         if(myService!=null){
         if(myService.isPlaying()) {
             updateUI();
@@ -215,6 +224,11 @@ public class MediaPlaybackFragment extends Fragment {
         this.myService = service;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("namesong",name);
 
+    }
 }
 
