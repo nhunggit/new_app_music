@@ -2,6 +2,7 @@ package com.example.new_music;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -48,6 +49,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_baihat, container, false);
+        View View=inflater.inflate(R.layout.item_baihat,container,false);
         recycleview = view.findViewById(R.id.recyclerview);
         constraintLayout=view.findViewById(R.id.constraintLayoutItem);
         NameSongPlaying=view.findViewById(R.id.namePlaySong);
@@ -55,7 +57,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         artist=view.findViewById(R.id.Artist);
         mConstraitLayout=view.findViewById(R.id.constraintLayout);
         disk=view.findViewById(R.id.disk);
-        nameSong=view.findViewById(R.id.namesong);
+        nameSong=View.findViewById(R.id.namesong);
         recycleview.setHasFixedSize(true);
         ispotraist=getResources().getBoolean(R.bool.isPortrait);
         @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -77,6 +79,7 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
                     }
                 });
             }
+
 
 //
         buttonPlay.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +157,15 @@ public class AllSongsFragment extends Fragment implements SongAdapter.OnClickIte
         else {
             myService.playSong(songs.get(position));
         }
-        updateUI();
+            updateUI();
+        if(myService!=null){
+
+        if((myService.getNameSong()).equals(songs.get(position).getTitle())){
+            Log.d("ko", "ClickItem: "+nameSong.getText());
+            nameSong.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+
+        }}
+
         } catch (IOException e) {
         e.printStackTrace();
     }

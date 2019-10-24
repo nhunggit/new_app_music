@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity  {
     boolean mBound=false;
     Fragment mAllSongFragment;
     Fragment mMediaPlayBackFragment;
+    SongAdapter songAdapter;
+   // private IConnectActivityAndBaseSong iConnectActivityAndBaseSong;
     private ServiceConnection mConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -30,7 +32,8 @@ public class MainActivity extends AppCompatActivity  {
             Log.d("BKAV DucLQ", " Bkav DucLQ bind service myService "+ myService);
             ((AllSongsFragment) mAllSongFragment).setMyService(myService);
             ((MediaPlaybackFragment)mMediaPlayBackFragment).setMyService(myService);
-
+            //iConnectActivityAndBaseSong.connectActivityAndBaseSong();
+           // songAdapter.setMyService(myService);
             mBound=true;
         }
         @Override
@@ -73,5 +76,11 @@ public class MainActivity extends AppCompatActivity  {
         return super.onCreateOptionsMenu(menu);
 
     }
+//    public void setiConnectActivityAndBaseSong(IConnectActivityAndBaseSong iConnectActivityAndBaseSong) {
+//        this.iConnectActivityAndBaseSong = iConnectActivityAndBaseSong;
+//    }
+//    interface IConnectActivityAndBaseSong {
+//        void connectActivityAndBaseSong();
+//    }
     
 }

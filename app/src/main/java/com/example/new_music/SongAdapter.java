@@ -1,6 +1,8 @@
 package com.example.new_music;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +65,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.WordViewHolder
                 onClickItemView.ClickItem(position);
             }
         });
+        if(myService!=null){
+            Log.d("service", "onBindViewHolder: "+"ok");
+            if((myService.getNameSong()).equals(mSong.get(position).getTitle())==true){
+                holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+                holder.mstt.setText("");
+                holder.mstt.setBackgroundResource(R.drawable.ic_equalizer_black_24dp);
+            }
+        }
+        else{
+            holder.mstt.setText(mSong.get(position).getId() + "");
+            holder.mnameSong.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
+        }
     }
 
     public void setOnClickItemView(OnClickItemView onClickItemView) {
